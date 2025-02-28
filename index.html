@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Zing Mp3 - Huấn Cánh Cụt</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+        <link rel="stylesheet" href="./css/base.css" />
+        <link rel="stylesheet" href="./css/root.css" />
+        <link rel="stylesheet" href="./css/gird.css" />
+        <link rel="stylesheet" href="./css/toast.css" />
+        <link rel="icon" href="./assests/favicon.ico" />
+    </head>
+    <body>
+        <div class="gird">
+            <div id="toast"></div>
+            <div id="overlay"></div>
+            <div class="app">
+                <iframe src="./modal/theme_modal.html" class="active" frameborder="0" id="modal"></iframe>
+                <div class="row no-gutters">
+                    <div class="col l-2 m-1 c-0">
+                        <aside id="sidebar">
+                            <div class="sidebar__logo">
+                                <img src="./assests/pc-logo.svg" alt="logo" class="sidebar__logo-img c-0 m-0 l-8" />
+                                <img src="./assests/mobile-logo.svg" alt="logo" class="sidebar__logo-img-mobile l-0" />
+                            </div>
+                            <div class="sidebar__menu">
+                                <a href="./home.html" class="sidebar__menu-item active">
+                                    <div class="row no-gutters">
+                                        <div class="col l-2 m-12 c-12">
+                                            <i class="fa-solid fa-house"></i>
+                                        </div>
+                                        <div class="col l-10 m-0 c-0">
+                                            <p class="sidebar__menu-item-title">Trang chủ</p>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a href="./my-songs.html" class="sidebar__menu-item">
+                                    <div class="row no-gutters">
+                                        <div class="col l-2 m-12 c-12">
+                                            <i class="fa-solid fa-compact-disc"></i>
+                                        </div>
+                                        <div class="col l-10 m-0 c-0">
+                                            <p class="sidebar__menu-item-title">Bài hát của tôi</p>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a href="./top-100.html" class="sidebar__menu-item">
+                                    <div class="row no-gutters">
+                                        <div class="col l-2 m-12 c-12">
+                                            <i class="fa-solid fa-chart-simple"></i>
+                                        </div>
+                                        <div class="col l-10 m-0 c-0">
+                                            <p class="sidebar__menu-item-title">Top 100</p>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a href="./playlist.html" class="sidebar__menu-item">
+                                    <div class="row no-gutters">
+                                        <div class="col l-2 m-12 c-12">
+                                            <i class="fa-solid fa-music"></i>
+                                        </div>
+                                        <div class="col l-10 m-0 c-0">
+                                            <p class="sidebar__menu-item-title">Playlist</p>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a href="./recently.html" class="sidebar__menu-item">
+                                    <div class="row no-gutters">
+                                        <div class="col l-2 m-12 c-12">
+                                            <i class="fa-solid fa-clock-rotate-left"></i>
+                                        </div>
+                                        <div class="col l-10 m-0 c-0">
+                                            <p class="sidebar__menu-item-title">Gần đây</p>
+                                        </div>
+                                    </div>
+                                </a>
+
+                                <div class="upgrade-account">
+                                    <p class="upgrade-account__title">Nghe nhạc không quảng cáo cùng kho nhạc vip</p>
+                                    <button class="upgrade-account__btn">NÂNG CẤP VIP</button>
+                                </div>
+                            </div>
+                        </aside>
+                    </div>
+                    <div class="col l-10 m-11 c-12">
+                        <header id="header">
+                            <nav id="nav">
+                                <ul class="nav__list">
+                                    <li class="nav__item nav--prev">
+                                        <i class="fa-solid fa-arrow-left"></i>
+                                    </li>
+                                    <li class="nav__item nav--next">
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </li>
+                                </ul>
+                            </nav>
+                            <div class="header__search-wrapper">
+                                <div class="header__search-wrapper-input">
+                                    <input type="text" id="header__search" placeholder="Tìm kiếm bài hát" />
+                                    <i class="fa-solid fa-magnifying-glass header__search-icon"></i>
+                                </div>
+                                <div class="header__search-wrapper-input-result">
+                                    <span class="header__search-wrapper-input-result-title">Bài hát</span>
+                                </div>
+                            </div>
+                            <div class="header__actions">
+                                <button class="header__actions-theme-btn">
+                                    <i class="fa-solid fa-shirt"></i>
+                                </button>
+                                <div class="header__actions_auth active">
+                                    <button class="header__actions-register-btn">Đăng ký</button>
+                                    <button class="header__actions-login-btn">Đăng nhập</button>
+                                </div>
+                                <div class="header__actions_user">
+                                    <div class="header__actions-user-avatar-wrapper">
+                                        <img
+                                            src="./assests/mobile-logo.svg"
+                                            alt=""
+                                            class="header__actions-user-avatar"
+                                        />
+                                        <div class="header__actions-user-avatar-popper">
+                                            <button data-type="my-songs" class="header__actions-user-avatar-popper-btn">
+                                                <i class="fa-solid fa-music"></i>
+                                                <span>Bài hát của tôi</span>
+                                            </button>
+                                            <button data-type="logout" class="header__actions-user-avatar-popper-btn">
+                                                <i class="fa-solid fa-right-from-bracket"></i>
+                                                <span>Đăng xuất</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </header>
+                        <main id="content"></main>
+                    </div>
+                </div>
+                <aside id="mobile-sidebar">
+                    <div class="row">
+                        <div class="col l-0 m-0 c-3">
+                            <div class="mobile-sidebar__item">
+                                <i class="fa-solid fa-house"></i>
+                                <span>Trang chủ</span>
+                            </div>
+                        </div>
+                        <div class="col l-0 m-0 c-3">
+                            <div class="mobile-sidebar__item">
+                                <i class="fa-solid fa-compact-disc"></i>
+                                <span>Bài hát</span>
+                            </div>
+                        </div>
+                        <div class="col l-0 m-0 c-3">
+                            <div class="mobile-sidebar__item">
+                                <i class="fa-solid fa-chart-simple"></i>
+                                <span>Top 100</span>
+                            </div>
+                        </div>
+                        <div class="col l-0 m-0 c-3">
+                            <div class="mobile-sidebar__item">
+                                <i class="fa-solid fa-music"></i>
+                                <span>Playlist</span>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+
+                <aside id="playlist-sidebar"></aside>
+            </div>
+        </div>
+    </body>
+    <script src="./js/toast.js"></script>
+    <script src="./js/root.js"></script>
+</html>

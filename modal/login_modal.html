@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <link rel="stylesheet" href="../css/base.css" />
+        <link rel="stylesheet" href="../css/base_modal.css" />
+        <link rel="stylesheet" href="../css/auth_modal.css" />
+    </head>
+    <body>
+        <div class="modal">
+            <div class="modal__bg"></div>
+            <main class="main">
+                <img src="../assests/logo.png" alt="logo" class="logo" />
+                <h1 class="main__title">Đăng nhập vào <span>HuanCanhCut</span></h1>
+                <div class="main__content">
+                    <form id="login-form">
+                        <div class="form-group">
+                            <input
+                                type="text"
+                                name="email"
+                                id="email"
+                                class="form-control"
+                                placeholder="Nhập email của bạn"
+                                value="tronghuanxxx@gmail.com"
+                            />
+                            <span class="form-message"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <input
+                                type="password"
+                                name="password"
+                                id="password"
+                                class="form-control"
+                                placeholder="Nhập mật khẩu của bạn"
+                                value="huancanhcut2"
+                            />
+                            <span class="form-message"></span>
+                        </div>
+
+                        <span class="error-message"></span>
+
+                        <button type="submit" class="form__button">Đăng nhập</button>
+                    </form>
+                    <div class="form__footer">
+                        <p class="form__footer-toggle-text">
+                            Bạn không có tài khoản?
+                            <span class="form__footer-toggle form__footer-toggle--register">Đăng ký</span>
+                        </p>
+                        <p class="form__footer-forgot-password">Quên mật khẩu</p>
+                        <p class="form__footer-policy">
+                            Việc bạn tiếp tục sử dụng trang web này có nghĩa bạn đồng ý với điều khoản sử dụng của chúng
+                            tôi
+                        </p>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </body>
+
+    <script src="../js/login_modal.js"></script>
+    <script src="../js/Validator.js"></script>
+    <script>
+        Validator({
+            form: '#login-form',
+            errorSelector: '.form-message',
+            formGroup: '.form-group',
+            rules: [
+                Validator.isRequired('#email'),
+                Validator.isEmail('#email'),
+                Validator.isRequired('#password'),
+                Validator.isPassword('#password', 6),
+            ],
+            submit: async (data) => {
+                const { email, password } = data
+
+                try {
+                    const response = await fetch('https://api.zingmp3.local/api/auth/login', {
+                        method: 'POST',
+                        body: JSON.stringify({ email, password }),
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    })
+
+                    if (!response.ok) {
+                        throw new Error(response.status)
+                    }
+
+                    const data = await response.json()
+
+                    // set token to local storage
+                    localStorage.setItem('token', data.meta.token)
+
+                    window.parent.postMessage(
+                        { type: 'modal:auth-success', data: { message: 'Đăng nhập thành công' } },
+                        '*'
+                    )
+                } catch (error) {
+                    if (error.message === '401') {
+                        const errorMessage = document.querySelector('.error-message')
+                        errorMessage.textContent = 'Email hoặc mật khẩu không chính xác'
+                    }
+                }
+            },
+        })
+    </script>
+</html>

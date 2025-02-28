@@ -1,0 +1,397 @@
+.app {
+    width: 100vw;
+    max-width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
+    background-image: url('https://huancanhcut.github.io/ZingClone/img/rosebackground.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    font-size: 1.6rem;
+    transition: all linear 0.1s;
+}
+
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 999;
+    display: none;
+}
+
+#overlay.active {
+    display: block;
+}
+
+#modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 12px;
+    width: min(580px, 95vw);
+    height: 85%;
+    border: none;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all linear 0.2s;
+}
+
+#modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+#sidebar {
+    background: var(--white-smoke-overlay);
+    max-height: 100vh;
+    height: 100vh;
+    overflow: overlay;
+}
+
+.sidebar__logo {
+    width: 100%;
+    height: var(--header-height);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sidebar__logo-img {
+    object-fit: cover;
+}
+
+.sidebar__menu {
+    width: 100%;
+    height: calc(100vh - var(--header-height));
+}
+
+.sidebar__menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+}
+
+.upgrade-account {
+    padding: 20px;
+    background-image: linear-gradient(117deg, #614de5, #b567d9);
+    margin: 12px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 1.4rem;
+    margin-top: 30px;
+}
+
+.upgrade-account__btn {
+    padding: 8px 20px;
+    border-radius: 100px;
+    background: yellow;
+    color: #111;
+    font-size: 1.4rem;
+    margin-top: 16px;
+}
+
+.sidebar__menu-item-title {
+    font-size: 1.6rem;
+    color: #fff;
+    white-space: nowrap;
+    margin-left: 10px;
+}
+
+.sidebar__menu-item.active {
+    background-color: var(--white-smoke-overlay);
+    border-left: 3px solid #f12d94;
+}
+
+.sidebar__menu-item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+#header {
+    height: var(--header-height);
+    background-color: #13254d;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    right: 0;
+    padding: 0 25px;
+    z-index: 100;
+    gap: 25px;
+}
+
+.nav {
+    display: flex;
+}
+
+.nav__list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+    padding: 0;
+}
+
+.nav__item {
+    cursor: pointer;
+    padding: 8px;
+    font-size: 1.8rem;
+    color: #dddddd;
+}
+
+#content {
+    width: 100%;
+    height: 100%;
+    max-height: calc(100vh - var(--header-height));
+    overflow: overlay;
+    padding-top: 20px;
+}
+
+#header,
+#content {
+    padding: 0 60px;
+}
+
+.header__search-wrapper {
+    flex: 1;
+    max-width: 500px;
+    position: relative;
+}
+
+.header__search-wrapper-input {
+    position: relative;
+}
+
+.header__search-wrapper-input-result {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    width: 100%;
+    background-image: url('https://huancanhcut.github.io/ZingClone/img/rosebackground.jpg');
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    display: none;
+}
+
+.header__search-wrapper-input-result.active {
+    display: block;
+}
+
+.header__search-wrapper-input-result-title {
+    font-size: 1.8rem;
+    color: #fff;
+}
+
+#header__search {
+    padding: 8px;
+    position: relative;
+    width: 100%;
+    background-color: var(--white-smoke-overlay);
+    border-radius: 20px;
+    padding-left: 40px;
+    color: #fff;
+}
+
+.header__search-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.header__actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.header__actions_user {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.header__actions-user-avatar-wrapper {
+    position: relative;
+}
+
+.header__actions-user-avatar-popper {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    width: min(250px, 95vw);
+    background-image: url('https://huancanhcut.github.io/ZingClone/img/rosebackground.jpg');
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    z-index: 10000;
+    overflow: hidden;
+    visibility: hidden;
+    opacity: 0;
+    transition: all linear 0.1s;
+    user-select: none;
+}
+
+.header__actions-user-avatar-popper.active {
+    visibility: visible;
+    opacity: 1;
+    user-select: auto;
+}
+
+.header__actions-user-avatar-popper-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.4rem;
+    color: #fff;
+    padding: 10px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.header__actions-user-avatar-popper-btn:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.header__actions-user-avatar-popper-btn:last-child {
+    border-bottom: none;
+}
+
+.header__actions_auth {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.header__actions-login-btn,
+.header__actions-register-btn {
+    font-size: 1.4rem;
+    color: #fff;
+}
+
+.header__actions-login-btn {
+    padding: 9px 20px;
+    border-radius: 100px;
+    background: var(--linear-gradient-primary);
+    color: #fff;
+    font-size: 1.4rem;
+}
+
+.header__actions-theme-btn,
+.header__actions-user-avatar {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    background-color: var(--white-smoke-overlay);
+    color: #fff;
+    cursor: pointer;
+}
+
+#modal.active {
+    display: block;
+}
+
+.header__actions_auth {
+    display: none;
+}
+
+.header__actions_auth.active {
+    display: flex;
+}
+
+.header__actions_user {
+    display: none;
+}
+
+.header__actions_user.active {
+    display: flex;
+}
+
+#mobile-sidebar {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: var(--sidebar-mobile-height);
+    background-color: red;
+    display: none;
+}
+
+.mobile-sidebar__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 1.4rem;
+    color: #fff;
+    padding: 10px 0px;
+    height: var(--sidebar-mobile-height);
+}
+
+#playlist-sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: min(400px, 100vw);
+    height: 100%;
+    background-color: #fff;
+    z-index: 1000;
+    transform: translateX(100%);
+    transition: all linear 0.3s;
+}
+
+#playlist-sidebar.active {
+    transform: translateX(0);
+}
+
+@media (max-width: 1024px) {
+    #header,
+    #content {
+        padding: 0 20px;
+    }
+}
+
+@media (max-width: 739px) {
+    #header,
+    #content {
+        padding: 0 6px;
+    }
+
+    #content {
+        padding-bottom: var(--sidebar-mobile-height);
+    }
+
+    #mobile-sidebar {
+        display: block;
+    }
+
+    .header__actions-register-btn {
+        display: none;
+    }
+
+    #nav {
+        display: none;
+    }
+}
+
+@media (max-width: 1113px) {
+    .sidebar__menu-item {
+        justify-content: center;
+    }
+
+    .upgrade-account {
+        display: none;
+    }
+}

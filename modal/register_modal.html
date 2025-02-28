@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <link rel="stylesheet" href="../css/base.css" />
+        <link rel="stylesheet" href="../css/base_modal.css" />
+        <link rel="stylesheet" href="../css/auth_modal.css" />
+    </head>
+    <body>
+        <div class="modal">
+            <div class="modal__bg"></div>
+            <main class="main">
+                <img src="../assests/logo.png" alt="logo" class="logo" />
+                <h1 class="main__title">Đăng ký <span>HuanCanhCut</span></h1>
+                <div class="main__content">
+                    <form id="register-form">
+                        <div class="form-group">
+                            <input
+                                type="text"
+                                name="email"
+                                id="email"
+                                class="form-control"
+                                placeholder="Nhập email của bạn"
+                            />
+                            <span class="form-message"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="form-control-group">
+                                <input
+                                    type="text"
+                                    name="verificationCode"
+                                    id="verificationCode"
+                                    class="form-control"
+                                    placeholder="Nhập mã xác minh"
+                                />
+                                <button type="button" class="form-control-send-code">Gửi mã</button>
+                            </div>
+                            <spa class="form-message"></spa>
+                        </div>
+
+                        <div class="form-group">
+                            <input
+                                type="password"
+                                name="password"
+                                id="password"
+                                class="form-control"
+                                placeholder="Nhập mật khẩu của bạn"
+                            />
+                            <span class="form-message"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <input
+                                type="password"
+                                name="confirmPassword"
+                                id="confirmPassword"
+                                class="form-control"
+                                placeholder="Nhập lại mật khẩu"
+                            />
+                            <span class="form-message"></span>
+                        </div>
+                        <button type="submit" class="form__button">Đăng ký</button>
+                    </form>
+                    <div class="form__footer">
+                        <p class="form__footer-toggle-text">
+                            Bạn đã có tài khoản?
+                            <span class="form__footer-toggle form__footer-toggle--login">Đăng nhập</span>
+                        </p>
+                        <p class="form__footer-forgot-password">Quên mật khẩu</p>
+                        <p class="form__footer-policy">
+                            Việc bạn tiếp tục sử dụng trang web này có nghĩa bạn đồng ý với điều khoản sử dụng của chúng
+                            tôi
+                        </p>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </body>
+    <script src="../js/register_modal.js"></script>
+    <script src="../js/Validator.js"></script>
+    <script>
+        Validator({
+            form: '#register-form',
+            errorSelector: '.form-message',
+            formGroup: '.form-group',
+            rules: [
+                Validator.isRequired('#email'),
+                Validator.isEmail('#email'),
+                Validator.isRequired('#verificationCode'),
+                Validator.isRequired('#password'),
+                Validator.isPassword('#password', 6),
+                Validator.isRequired('#confirmPassword'),
+                Validator.isConfirm('#password', () => {
+                    return document.getElementById('password').value
+                }),
+            ],
+            submit: (data) => {
+                console.log(data)
+            },
+        })
+    </script>
+</html>
