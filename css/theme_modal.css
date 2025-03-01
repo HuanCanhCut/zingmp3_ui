@@ -27,6 +27,7 @@
 
 .theme__item-name {
     font-size: 12px;
+    text-align: center;
 }
 
 .theme__item-img {
@@ -55,7 +56,7 @@
     color: #fff;
     border: none;
     border-radius: 30px;
-    padding: 2px 16px;
+    padding: 4px 16px;
     white-space: nowrap;
     opacity: 0;
     pointer-events: none;
@@ -65,4 +66,11 @@
 .theme__item-img:hover .theme__item-apply {
     opacity: 1;
     pointer-events: auto;
+}
+
+.theme__item-img-model {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
 }

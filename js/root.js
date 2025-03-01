@@ -32,14 +32,19 @@ const app = {
                     modal.setAttribute('src', `./modal/${e.data.data}.html`)
                     break
                 case 'modal:auth-success':
-                    this.closeAuthModal()
+                    this.closeModal()
                     toast({
                         title: 'Thành công',
                         message: e.data.data.message,
                         type: 'success',
                     })
-
                     this.loadHeaderActionUI()
+                    break
+
+                case 'theme:apply':
+                    const themeData = e.data.data
+
+                    this.handleSetTheme(themeData)
                     break
                 default:
                     break
@@ -64,16 +69,14 @@ const app = {
 
         // close auth modal when click on overlay
         overlay.addEventListener('click', () => {
-            this.closeAuthModal()
-            this.closeThemeModal()
+            this.closeModal()
         })
 
         // listen keydown event
         window.addEventListener('keydown', (e) => {
             switch (e.key) {
                 case 'Escape':
-                    this.closeAuthModal()
-                    this.closeThemeModal()
+                    this.closeModal()
                     break
             }
         })
@@ -115,7 +118,7 @@ const app = {
         overlay.classList.add('active')
     },
 
-    closeAuthModal() {
+    closeModal() {
         modal.classList.remove('active')
         overlay.classList.remove('active')
     },
@@ -124,6 +127,33 @@ const app = {
         modal.setAttribute('src', `./modal/${modalName}.html`)
         modal.classList.add('active')
         overlay.classList.add('active')
+    },
+
+    handleSetTheme(themeData) {
+        Object.assign($('.app').style, {
+            background: `url('${themeData.background_image}')`,
+            backgroundSize: 'cover',
+        })
+
+        Object.assign($('#header').style, {
+            backgroundImage: `url('${themeData.background_model}')`,
+            backgroundSize: 'cover',
+        })
+
+        Object.assign($('.header__actions-theme-btn').style, {
+            backgroundImage: `url('${themeData.background_model}')`,
+            color: themeData.text_primary,
+        })
+
+        Object.assign($('#mobile-sidebar').style, {
+            backgroundImage: `url('${themeData.background_model}')`,
+            backgroundSize: 'cover',
+        })
+
+        // set text color
+        document.documentElement.style.setProperty('--text-primary', themeData.text_primary)
+        document.documentElement.style.setProperty('--text-primary-contradictory', themeData.text_primary_contradictory)
+        document.documentElement.style.setProperty('--border-gray-color', themeData.border_gray_color)
     },
 
     init() {

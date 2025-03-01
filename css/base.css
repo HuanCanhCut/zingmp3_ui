@@ -5,6 +5,10 @@
     --header-height: 70px;
     --linear-gradient-primary: linear-gradient(to right bottom, #ff8f26, #ff5117);
     --sidebar-mobile-height: 60px;
+
+    --text-primary: #fff;
+    --text-primary-contradictory: #222;
+    --border-gray-color: rgba(255, 255, 255, 0.1);
 }
 
 * {
@@ -17,7 +21,7 @@ html,
 body {
     font-size: 62.5%;
     line-height: 1.6rem;
-    color: #fff;
+    color: var(--text-primary);
     font-family: 'Be Vietnam Pro', sans-serif;
     font-style: normal;
 }
@@ -39,7 +43,7 @@ input {
 }
 
 a[href] {
-    color: #fff;
+    color: var(--text-primary);
     text-decoration: none;
     line-height: 1;
 }
