@@ -46,6 +46,14 @@ const app = {
 
                     this.handleSetTheme(themeData)
                     break
+
+                case 'modal:toast-success':
+                    toast({
+                        title: 'Thành công',
+                        message: e.data.data.message,
+                        type: 'success',
+                    })
+                    break
                 default:
                     break
             }
@@ -150,10 +158,16 @@ const app = {
             backgroundSize: 'cover',
         })
 
+        Object.assign($('.header__actions-user-avatar-popper').style, {
+            backgroundImage: `url('${themeData.background_model}')`,
+            color: themeData.text_primary,
+        })
+
         // set text color
         document.documentElement.style.setProperty('--text-primary', themeData.text_primary)
         document.documentElement.style.setProperty('--text-primary-contradictory', themeData.text_primary_contradictory)
         document.documentElement.style.setProperty('--border-gray-color', themeData.border_gray_color)
+        document.documentElement.style.setProperty('--smoke-overlay', themeData.smoke_overlay)
     },
 
     init() {

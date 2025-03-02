@@ -9,6 +9,7 @@
     font-size: 1.6rem;
     transition: all linear 0.15s;
     color: var(--text-primary-contradictory);
+    display: flex;
 }
 
 #overlay {
@@ -46,11 +47,20 @@
     visibility: visible;
 }
 
+.app__sidebar-container {
+    width: var(--sidebar-width);
+    max-width: var(--sidebar-width);
+}
+
 #sidebar {
-    background: var(--white-smoke-overlay);
+    background: var(--smoke-overlay);
     max-height: 100vh;
     height: 100vh;
     overflow: overlay;
+}
+
+.content-container {
+    flex: 1;
 }
 
 .sidebar__logo {
@@ -105,12 +115,12 @@
 }
 
 .sidebar__menu-item.active {
-    background-color: var(--white-smoke-overlay);
+    background-color: var(--smoke-overlay);
     border-left: 3px solid #f12d94;
 }
 
 .sidebar__menu-item:hover {
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: var(--smoke-overlay);
 }
 
 #header {
@@ -164,7 +174,7 @@
     padding: 8px;
     position: relative;
     width: 100%;
-    background-color: var(--white-smoke-overlay);
+    background-color: var(--smoke-overlay);
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
     border-radius: 20px;
     padding-left: 40px;
@@ -256,12 +266,12 @@
     gap: 10px;
     font-size: 1.4rem;
     color: var(--text-primary);
-    padding: 10px 20px;
+    padding: 12px 20px;
     border-bottom: 1px solid var(--border-gray-color);
 }
 
 .header__actions-user-avatar-popper-btn:hover {
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: var(--smoke-overlay);
 }
 
 .header__actions-user-avatar-popper-btn:last-child {
@@ -284,7 +294,7 @@
     padding: 9px 20px;
     border-radius: 100px;
     background: var(--linear-gradient-primary);
-    color: var(--text-primary);
+    color: #fff;
     font-size: 1.4rem;
 }
 
@@ -296,7 +306,7 @@
     justify-content: center;
     align-items: center;
     border-radius: 50%;
-    background-color: var(--white-smoke-overlay);
+    background-color: var(--smoke-overlay);
     color: var(--text-primary);
     cursor: pointer;
 }
@@ -304,7 +314,7 @@
 .header__actions-theme-btn {
     background-image: url('../assets/modalThemes/RoseBgModel.jpg');
     color: var(--text-primary);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
 #modal.active {
@@ -355,7 +365,7 @@
     right: 0;
     width: min(400px, 100vw);
     height: 100%;
-    background-color: var(--white-smoke-overlay);
+    background-color: var(--smoke-overlay);
     z-index: 1000;
     transform: translateX(100%);
     transition: all linear 0.3s;
@@ -369,6 +379,21 @@
     #header,
     #content {
         padding: 0 20px;
+    }
+}
+
+@media (max-width: 1113px) {
+    .sidebar__menu-item {
+        justify-content: center;
+    }
+
+    .upgrade-account {
+        display: none;
+    }
+
+    .app__sidebar-container {
+        width: var(--sidebar-tablet-width);
+        max-width: var(--sidebar-tablet-width);
     }
 }
 
@@ -393,14 +418,8 @@
     #nav {
         display: none;
     }
-}
 
-@media (max-width: 1113px) {
-    .sidebar__menu-item {
-        justify-content: center;
-    }
-
-    .upgrade-account {
+    .app__sidebar-container {
         display: none;
     }
 }

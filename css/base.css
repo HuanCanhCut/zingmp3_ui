@@ -1,10 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
 
 :root {
-    --white-smoke-overlay: rgba(255, 255, 255, 0.05);
+    --smoke-overlay: rgba(255, 255, 255, 0.05);
     --header-height: 70px;
     --linear-gradient-primary: linear-gradient(to right bottom, #ff8f26, #ff5117);
     --sidebar-mobile-height: 60px;
+    --sidebar-width: 240px;
+    --sidebar-tablet-width: 70px;
 
     --text-primary: #fff;
     --text-primary-contradictory: #222;

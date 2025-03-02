@@ -12,6 +12,7 @@ const app = {
             text_primary: '#fff',
             text_primary_contradictory: '#222',
             border_gray_color: 'rgba(255, 255, 255, 0.1)',
+            smoke_overlay: 'rgba(255, 255, 255, 0.05)',
         },
         {
             background_image: '../assets/backgroundThemes/Eiffel.jpg',
@@ -22,6 +23,7 @@ const app = {
             text_primary: '#fff',
             text_primary_contradictory: '#222',
             border_gray_color: 'rgba(255, 255, 255, 0.1)',
+            smoke_overlay: 'rgba(255, 255, 255, 0.05)',
         },
         {
             background_image: '../assets/backgroundThemes/IU.jpg',
@@ -32,6 +34,7 @@ const app = {
             text_primary: '#222',
             text_primary_contradictory: '#fff',
             border_gray_color: 'rgba(0, 0, 0, 0.1)',
+            smoke_overlay: 'rgba(0, 0, 0, 0.05)',
         },
         {
             background_image: '../assets/backgroundThemes/Jisoo.jpg',
@@ -42,6 +45,7 @@ const app = {
             text_primary: '#222',
             text_primary_contradictory: '#fff',
             border_gray_color: 'rgba(0, 0, 0, 0.1)',
+            smoke_overlay: 'rgba(0, 0, 0, 0.05)',
         },
     ],
 
