@@ -237,6 +237,11 @@ const app = {
             backgroundSize: 'cover',
         })
 
+        Object.assign($('.music-player').style, {
+            backgroundImage: `url('${themeData.background_model}')`,
+            backgroundSize: 'cover',
+        })
+
         // set text color
         document.documentElement.style.setProperty('--text-primary', themeData.text_primary)
         document.documentElement.style.setProperty('--text-primary-contradictory', themeData.text_primary_contradictory)

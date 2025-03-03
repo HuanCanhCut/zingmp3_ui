@@ -183,6 +183,54 @@
                     </div>
                 </aside>
 
+                <div class="music__player">
+                    <div class="music_player-info">
+                        <img
+                            class="music__player-info-img"
+                            src="https://cdn11.dienmaycholon.vn/filewebdmclnew/public/userupload/files/Image%20FP_2024/meme-meo-4.jpg"
+                            alt=""
+                        />
+                        <div class="music__player-info-title">
+                            <p class="music__player-info-title-name">Tên bài hát</p>
+                            <p class="music__player-info-title-artist">Tên ca sĩ</p>
+                        </div>
+                    </div>
+
+                    <div class="music__player-control playing">
+                        <div class="music__player-control-actions">
+                            <button class="music__player-control-actions-btn btn-repeat">
+                                <i class="fas fa-redo"></i>
+                            </button>
+                            <button class="music__player-control-actions-btn btn-prev">
+                                <i class="fas fa-step-backward"></i>
+                            </button>
+                            <button class="music__player-control-actions-btn btn-toggle-play">
+                                <i class="fa-solid fa-play play-icon"></i>
+                                <i class="fa-sharp fa-regular fa-circle-pause pause-icon"></i>
+                            </button>
+                            <button class="music__player-control-actions-btn btn-next">
+                                <i class="fas fa-step-forward"></i>
+                            </button>
+                            <button class="music__player-control-actions-btn btn-random">
+                                <i class="fas fa-random"></i>
+                            </button>
+                        </div>
+                        <input
+                            type="range"
+                            id="music__player-control-progress"
+                            value="0"
+                            min="0"
+                            max="100"
+                            step="0.1"
+                        />
+                    </div>
+
+                    <div class="music__player-action">
+                        <button class="music__player-action-btn open-playlist-sidebar">
+                            <i class="fa-solid fa-list"></i>
+                        </button>
+                    </div>
+                </div>
                 <aside id="playlist-sidebar"></aside>
             </div>
         </div>
