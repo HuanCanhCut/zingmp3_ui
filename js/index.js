@@ -64,6 +64,10 @@ const app = {
             if (!e.target.closest(`.header__actions-user-avatar-wrapper`)) {
                 userAvatarPopper.classList.remove('active')
             }
+
+            if (!e.target.closest(`.header__search-wrapper`)) {
+                $('.header__search-wrapper-input-result').classList.remove('active')
+            }
         })
 
         // handle open auth modal
@@ -118,6 +122,71 @@ const app = {
         themeModalBtn.onclick = () => {
             this.openThemeModal()
         }
+
+        $('#header__input-search').oninput = async (e) => {
+            await this.handleSearch(e)
+        }
+
+        $('#header__input-search').onfocus = () => {
+            $('.header__search-wrapper-input-result').classList.add('active')
+        }
+    },
+
+    async handleSearch(e) {
+        const value = e.target.value
+
+        $('.header__search-wrapper-input-result').classList.toggle('active', !!value.trim())
+
+        if (value.length === 0) {
+            $('.header__search-wrapper-input-result-list').innerHTML = ''
+        }
+
+        if (value.length > 0) {
+            // debounce value
+            const debounce = (callback, delay) => {
+                let timeout
+                return function () {
+                    clearTimeout(timeout)
+                    timer = setTimeout(() => {
+                        callback()
+                    }, delay)
+                }
+            }
+
+            const handleSearch = debounce(async () => {
+                const res = await fetch(`https://api.zingmp3.local/api/music/search?query=${value}`)
+                const data = await res.json()
+
+                if (Array.isArray(data.musics)) {
+                    $('.header__search-wrapper-input-result-list').innerHTML = data.musics
+                        .map((music) => {
+                            return `
+                                <div class="header__search-wrapper-input-result-item">
+                                    <div class="header__search-wrapper-input-result-img">
+                                        <img
+                                            src="${music.thumbnail}"
+                                            alt=""
+                                        />
+                                        <i class="fa-solid fa-play"></i>
+                                    </div>
+
+                                    <div class="header__search-wrapper-input-result-info">
+                                        <p class="header__search-wrapper-input-result-info-title">
+                                            ${music.name}
+                                        </p>
+                                        <p class="header__search-wrapper-input-result-info-artist">
+                                            ${music.artist}
+                                        </p>
+                                    </div>
+                                </div>
+                            `
+                        })
+                        .join('')
+                }
+            }, 500)
+
+            handleSearch()
+        }
     },
 
     openThemeModal() {
@@ -161,6 +230,11 @@ const app = {
         Object.assign($('.header__actions-user-avatar-popper').style, {
             backgroundImage: `url('${themeData.background_model}')`,
             color: themeData.text_primary,
+        })
+
+        Object.assign($('.header__search-wrapper-input-result').style, {
+            backgroundImage: `url('${themeData.background_model}')`,
+            backgroundSize: 'cover',
         })
 
         // set text color

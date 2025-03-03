@@ -170,7 +170,7 @@
     padding: 0 60px;
 }
 
-#header__search {
+#header__input-search {
     padding: 8px;
     position: relative;
     width: 100%;
@@ -193,7 +193,7 @@
 
 .header__search-wrapper-input-result {
     position: absolute;
-    top: calc(100% + 5px);
+    top: calc(100% + 10px);
     left: 0;
     width: 100%;
     background-image: url('../assets/modalThemes/RoseBgModel.jpg');
@@ -219,6 +219,77 @@
     top: 50%;
     transform: translateY(-50%);
     color: var(--text-primary);
+}
+
+.header__search-wrapper-input-result-list {
+    color: var(--text-primary);
+    margin-top: 12px;
+}
+
+.header__search-wrapper-input-result-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.header__search-wrapper-input-result-item:hover {
+    background-color: var(--smoke-overlay);
+    cursor: pointer;
+}
+
+.header__search-wrapper-input-result-item:hover .header__search-wrapper-input-result-img i {
+    opacity: 1;
+}
+
+.header__search-wrapper-input-result-item:hover .header__search-wrapper-input-result-img img {
+    filter: brightness(0.7);
+}
+
+.header__search-wrapper-input-result-img {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 42px;
+    height: 42px;
+    position: relative;
+}
+
+.header__search-wrapper-input-result-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.header__search-wrapper-input-result-img i {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.8rem;
+    color: var(--text-primary);
+    opacity: 0;
+}
+
+.header__search-wrapper-input-result-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.header__search-wrapper-input-result-info-title {
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: var(--text-primary);
+}
+
+.header__search-wrapper-input-result-info-artist {
+    font-size: 1.4rem;
+    color: var(--text-primary);
+    font-weight: 300;
+    color: gray;
 }
 
 .header__actions {
