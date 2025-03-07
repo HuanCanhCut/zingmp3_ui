@@ -1,0 +1,221 @@
+.user_info {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+.user_info-avatar {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.user_info-name {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-top: 16px;
+}
+
+.home__content_slider {
+    height: 300px;
+    display: flex;
+    position: relative;
+}
+
+.home__content_slider img {
+    position: absolute;
+    border-radius: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: all linear 0.7s;
+}
+
+.home__content_slider-first {
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    z-index: 5;
+    right: 0;
+    opacity: 1;
+}
+
+.home__content_slider-second {
+    height: 85%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    z-index: 4;
+    right: 20%;
+    opacity: 0.8;
+}
+
+.home__content_slider-third {
+    height: 70%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    z-index: 3;
+    right: 40%;
+    opacity: 0.6;
+}
+
+.home__content_slider-fourth {
+    height: 60%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    z-index: 2;
+    right: 55%;
+    opacity: 0.4;
+}
+
+.home__content_slider-fifth {
+    height: 55%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    z-index: 1;
+    right: 60%;
+    opacity: 0;
+}
+
+.align-center {
+    align-items: center;
+}
+
+.home__content {
+    margin-top: 40px;
+}
+
+.home__content_playlist {
+    height: 400px;
+    overflow-y: overlay;
+    margin-left: 20px;
+    padding: 16px;
+    margin-top: 16px;
+}
+
+.home__content_playlist_upload {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0 16px;
+}
+
+.home__content_playlist_upload-btn {
+    padding: 8px 20px;
+    border-radius: 50px;
+    background-color: purple;
+    border: none;
+    cursor: pointer;
+    color: white;
+}
+
+.home__content_playlist-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 6px;
+}
+
+.home__content_playlist-item.active {
+    background-color: var(--smoke-overlay);
+}
+
+.home__content_playlist-item-wrapper-img {
+    position: relative;
+}
+
+.home__content_playlist-item-wrapper-img i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 2.1rem;
+    opacity: 0;
+}
+
+.home__content_playlist-item:hover {
+    background-color: var(--smoke-overlay);
+}
+
+.home__content_playlist-item:hover .home__content_playlist-item-wrapper-img i {
+    opacity: 1;
+}
+
+.home__content_playlist-item:hover img {
+    filter: brightness(0.7);
+}
+
+.home__content_playlist-item-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.home__content_playlist-item img {
+    width: 50px;
+    height: 50px;
+    border-radius: 6px;
+    object-fit: cover;
+}
+
+.home__content_playlist-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.home__content_playlist-item-info-title {
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--text-primary);
+}
+
+.home__content_playlist-item-info-artist {
+    font-size: 14px;
+    font-weight: 400;
+    font-weight: 300;
+    color: gray;
+}
+
+.home__content_playlist-item-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.playlist__item-heart {
+    color: var(--text-primary);
+    font-size: 1.8rem;
+    cursor: pointer;
+    background-color: var(--smoke-overlay);
+    padding: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.playlist__item-heart.active {
+    color: rgb(255, 99, 125);
+}
+
+.home__content_playlist-item-actions-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+}
+
+@media (max-width: 1113px) {
+    .home__content_playlist {
+        margin-left: 0;
+        padding: 0;
+        height: 300px;
+    }
+}

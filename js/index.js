@@ -237,7 +237,12 @@ const app = {
             backgroundSize: 'cover',
         })
 
-        Object.assign($('.music-player').style, {
+        Object.assign($('.music__player').style, {
+            backgroundImage: `url('${themeData.background_model}')`,
+            backgroundSize: 'cover',
+        })
+
+        Object.assign($('#playlist-sidebar').style, {
             backgroundImage: `url('${themeData.background_model}')`,
             backgroundSize: 'cover',
         })
