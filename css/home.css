@@ -32,7 +32,7 @@
     border-radius: 12px;
     top: 50%;
     transform: translateY(-50%);
-    transition: all linear 0.7s;
+    transition: all linear 0.8s;
 }
 
 .home__content_slider-first {

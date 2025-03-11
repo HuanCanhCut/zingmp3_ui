@@ -4,14 +4,14 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Zing Mp3 - Huấn Cánh Cụt</title>
-        <link rel="icon" href="./assets/favicon.ico" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
         <link rel="stylesheet" href="./css/base.css" />
         <link rel="stylesheet" href="./css/defaultLayout.css" />
         <link rel="stylesheet" href="./css/gird.css" />
         <link rel="stylesheet" href="./css/toast.css" />
-        <link rel="stylesheet" href="./css/home.css" />
+        <link rel="icon" href="./assets/favicon.ico" />
+        <link rel="stylesheet" href="./css/song.css" />
     </head>
     <body>
         <div>
@@ -130,32 +130,29 @@
                                     </div>
                                 </header>
                                 <main id="content">
-                                    <div class="user_info">
-                                        <img
-                                            class="user_info-avatar"
-                                            src="https://i.pinimg.com/550x/94/7e/db/947edbbf6ced34863fc8702ed29ef79f.jpg"
-                                            alt=""
-                                        />
-                                        <h2 class="user_info-name">Zing Mp3</h2>
-                                    </div>
-
-                                    <div class="home__content">
-                                        <div class="grid">
-                                            <div class="row no-gutters align-center">
-                                                <div class="col l-4 m-0 c-0">
-                                                    <div class="home__content_slider"></div>
-                                                </div>
-                                                <div class="col l-8 m-12 c-12">
-                                                    <div class="home__content_playlist-wrapper">
-                                                        <div class="home__content_playlist_upload">
-                                                            <button class="home__content_playlist_upload-btn">
-                                                                <i class="fa-solid fa-cloud-arrow-up"></i>
-                                                                Tải lên
-                                                            </button>
+                                    <div class="grid">
+                                        <div class="row no-gutters">
+                                            <div class="col l-5 m-12 c-12">
+                                                <div class="content__thumbnail-container">
+                                                    <div class="content__thumbnail-container-thumb">
+                                                        <img
+                                                            class="content__thumbnail__thumb-img"
+                                                            src="https://cdn11.dienmaycholon.vn/filewebdmclnew/public/userupload/files/Image%20FP_2024/meme-meo-36.jpg"
+                                                            alt=""
+                                                        />
+                                                        <div class="content__thumbnail-info">
+                                                            <h2 class="content__thumbnail-info-title">
+                                                                Anh đã lạc vào
+                                                            </h2>
+                                                            <p class="content__thumbnail-info-artist">Đại mèo remix</p>
                                                         </div>
-                                                        <div class="home__content_playlist"></div>
+
+                                                        <button class="toggle-play-btn">Tiếp tục phát</button>
                                                     </div>
                                                 </div>
+                                            </div>
+                                            <div class="col l-7 m-12 c-12">
+                                                <div class="content__playlist-container"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -189,7 +186,6 @@
                 </aside>
 
                 <div class="music__player">
-                    <audio src="" id="music__player-audio" hidden></audio>
                     <div class="music_player-info">
                         <img
                             class="music__player-info-thumb"
@@ -202,7 +198,8 @@
                         </div>
                     </div>
 
-                    <div class="music__player-control">
+                    <div class="music__player-control playing">
+                        <audio src="" id="music__player-audio"></audio>
                         <div class="music__player-control-actions">
                             <button class="music__player-control-actions-btn btn-repeat">
                                 <i class="fas fa-redo"></i>
@@ -248,6 +245,6 @@
         <script src="./js/defaultLayout.js"></script>
         <script type="module" src="./js/helpers/event.js"></script>
         <script type="module" src="./js/playlist.js"></script>
-        <script type="module" src="./js/home.js"></script>
+        <script type="module" src="./js/song.js"></script>
     </body>
 </html>

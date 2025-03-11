@@ -20,11 +20,19 @@
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.4);
     z-index: 999;
-    display: none;
+    opacity: 0;
+    visibility: hidden;
+    user-select: none;
+    transition: all linear 0.2s;
+    pointer-events: none;
+    z-index: 9999;
 }
 
 #overlay.active {
-    display: block;
+    opacity: 1;
+    visibility: visible;
+    user-select: auto;
+    pointer-events: auto;
 }
 
 #modal {
@@ -45,6 +53,7 @@
 #modal.active {
     opacity: 1;
     visibility: visible;
+    z-index: 999999;
 }
 
 .app__sidebar-container {
@@ -450,6 +459,7 @@
 
 #playlist-sidebar.active {
     transform: translateX(0);
+    z-index: 999999999999;
 }
 
 .music__player {

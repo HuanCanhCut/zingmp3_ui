@@ -10,6 +10,8 @@ const userAvatar = $('.header__actions-user-avatar')
 const userAvatarPopper = $('.header__actions-user-avatar-popper')
 const userAvatarPopperBtns = $$('.header__actions-user-avatar-popper-btn')
 const themeModalBtn = $('.header__actions-theme-btn')
+const inputSearch = $('#header__input-search')
+const overlay = $('#overlay')
 
 const app = {
     loadHeaderActionUI() {
@@ -123,12 +125,14 @@ const app = {
             this.openThemeModal()
         }
 
-        $('#header__input-search').oninput = async (e) => {
+        inputSearch.oninput = async (e) => {
             await this.handleSearch(e)
         }
 
-        $('#header__input-search').onfocus = () => {
-            $('.header__search-wrapper-input-result').classList.add('active')
+        inputSearch.onfocus = () => {
+            if (inputSearch.value.trim()) {
+                $('.header__search-wrapper-input-result').classList.add('active')
+            }
         }
     },
 
@@ -142,50 +146,49 @@ const app = {
         }
 
         if (value.length > 0) {
-            // debounce value
-            const debounce = (callback, delay) => {
-                let timeout
-                return function () {
-                    clearTimeout(timeout)
-                    timer = setTimeout(() => {
-                        callback()
-                    }, delay)
-                }
+            // Create debounced search function only once
+            if (!this.debouncedSearch) {
+                this.debouncedSearch = (() => {
+                    let timeoutId
+                    return async (searchValue) => {
+                        clearTimeout(timeoutId)
+                        timeoutId = setTimeout(async () => {
+                            const res = await fetch(`https://api.zingmp3.local/api/music/search?query=${searchValue}`)
+                            const data = await res.json()
+
+                            if (Array.isArray(data.musics)) {
+                                $('.header__search-wrapper-input-result-list').innerHTML = data.musics
+                                    .map((music) => {
+                                        return `
+                                            <a href="/song.html?id=${music.id}" class="header__search-wrapper-input-result-item">
+                                                <div class="header__search-wrapper-input-result-img">
+                                                    <img
+                                                        src="${music.thumbnail}"
+                                                        alt=""
+                                                    />
+                                                    <i class="fa-solid fa-play"></i>
+                                                </div>
+
+                                                <div class="header__search-wrapper-input-result-info">
+                                                    <p class="header__search-wrapper-input-result-info-title">
+                                                        ${music.name}
+                                                    </p>
+                                                    <p class="header__search-wrapper-input-result-info-artist">
+                                                        ${music.artist}
+                                                    </p>
+                                                </div>
+                                            </a>
+                                        `
+                                    })
+                                    .join('')
+                            }
+                        }, 500)
+                    }
+                })()
             }
 
-            const handleSearch = debounce(async () => {
-                const res = await fetch(`https://api.zingmp3.local/api/music/search?query=${value}`)
-                const data = await res.json()
-
-                if (Array.isArray(data.musics)) {
-                    $('.header__search-wrapper-input-result-list').innerHTML = data.musics
-                        .map((music) => {
-                            return `
-                                <div class="header__search-wrapper-input-result-item">
-                                    <div class="header__search-wrapper-input-result-img">
-                                        <img
-                                            src="${music.thumbnail}"
-                                            alt=""
-                                        />
-                                        <i class="fa-solid fa-play"></i>
-                                    </div>
-
-                                    <div class="header__search-wrapper-input-result-info">
-                                        <p class="header__search-wrapper-input-result-info-title">
-                                            ${music.name}
-                                        </p>
-                                        <p class="header__search-wrapper-input-result-info-artist">
-                                            ${music.artist}
-                                        </p>
-                                    </div>
-                                </div>
-                            `
-                        })
-                        .join('')
-                }
-            }, 500)
-
-            handleSearch()
+            // Use the cached debounced function
+            this.debouncedSearch(value)
         }
     },
 
