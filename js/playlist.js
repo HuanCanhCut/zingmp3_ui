@@ -29,7 +29,12 @@ const playerController = {
     isRepeat: localStorage.getItem('isRepeat') === 'true' || false,
 
     async getSongs() {
-        const res = await fetch('https://api.zingmp3.local/api/music')
+        const token = localStorage.getItem('token')
+        const res = await fetch('https://api.zingmp3.local/api/music', {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
         const data = await res.json()
 
         this.songs = data.musics

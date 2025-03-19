@@ -212,6 +212,10 @@
     cursor: pointer;
 }
 
+.home__content_playlist-item-actions-btn i.active {
+    color: rgb(255, 99, 125);
+}
+
 @media (max-width: 1113px) {
     .home__content_playlist {
         margin-left: 0;

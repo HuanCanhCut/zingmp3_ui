@@ -1,3 +1,5 @@
+import { listenEvent } from './helpers/event.js'
+
 const $ = document.querySelector.bind(document)
 const $$ = document.querySelectorAll.bind(document)
 
@@ -134,6 +136,15 @@ const app = {
                 $('.header__search-wrapper-input-result').classList.add('active')
             }
         }
+
+        // Listen custom event
+
+        listenEvent({
+            eventName: 'modal:open-auth-modal',
+            handler: () => {
+                this.openAuthModal('login_modal')
+            },
+        })
     },
 
     async handleSearch(e) {
@@ -182,7 +193,7 @@ const app = {
                                     })
                                     .join('')
                             }
-                        }, 500)
+                        }, 300)
                     }
                 })()
             }
