@@ -17,7 +17,12 @@ const SongApp = {
     currentIndex: Number(getParams('id')),
     isPlaying: false,
     async getSongs() {
-        const res = await fetch('https://api.zingmp3.local/api/music')
+        const token = localStorage.getItem('token')
+        const res = await fetch('https://api.zingmp3.local/api/music', {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
         const data = await res.json()
 
         this.songs = data.musics
@@ -53,7 +58,7 @@ const SongApp = {
                     </div>
                     <div class="song-item-actions">
                         <button class="song-item-actions-btn song__item-heart">
-                            <i class="fa-solid fa-heart"></i>
+                            <i class="fa-solid fa-heart ${song.is_favorite ? 'active' : ''}"></i>
                         </button>
                     </div>
                 </div>
@@ -73,13 +78,58 @@ const SongApp = {
 
     handleEvent() {
         // play song when click
-        playList.onclick = (e) => {
-            const songIndex = e.target.closest('.song-item:not(.active)')?.getAttribute('data-index')
+        playList.onclick = async (e) => {
+            if (!e.target.closest('.song__item-heart')) {
+                const songIndex = e.target.closest('.song-item:not(.active)')?.getAttribute('data-index')
 
-            if (!e.target.closest('.playlist__item-heart') && songIndex) {
+                if (!songIndex) return
+
                 this.currentIndex = Number(songIndex)
                 this.loadCurrentSong()
                 sendEvent({ eventName: 'song:choose-song', detail: songIndex })
+            }
+
+            if (e.target.closest('.song__item-heart')) {
+                const songIndex = e.target.closest('.song-item')?.getAttribute('data-index')
+
+                const isFavorite = this.songs[songIndex].is_favorite
+
+                const token = localStorage.getItem('token')
+
+                this.songs[songIndex].is_favorite = !isFavorite
+                // add favorite
+                if (!isFavorite) {
+                    await fetch(`https://api.zingmp3.local/api/favorite`, {
+                        method: 'POST',
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            song_id: this.songs[songIndex].id,
+                        }),
+                    })
+
+                    sendEvent({
+                        eventName: 'favorite:add',
+                        detail: this.songs[songIndex].id,
+                    })
+                } else {
+                    // remove favorite
+                    await fetch(`https://api.zingmp3.local/api/favorite/${this.songs[songIndex].id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    })
+
+                    sendEvent({
+                        eventName: 'favorite:remove',
+                        detail: this.songs[songIndex].id,
+                    })
+                }
+
+                this.loadCurrentSong()
             }
         }
 
@@ -108,6 +158,33 @@ const SongApp = {
                 togglePlayBtn.textContent = this.isPlaying ? 'Tạm dừng' : 'Tiếp tục phát'
 
                 this.isPlaying ? cdThumbAnimate.play() : cdThumbAnimate.pause()
+            },
+        })
+
+        listenEvent({
+            eventName: 'favorite:choose-song',
+            handler: (e) => {
+                const songIndex = this.songs.findIndex((song) => song.id === Number(e.detail))
+                this.currentIndex = songIndex
+                this.loadCurrentSong()
+            },
+        })
+
+        listenEvent({
+            eventName: 'favorite:add',
+            handler: (e) => {
+                const songIndex = this.songs.findIndex((song) => song.id === Number(e.detail))
+                this.songs[songIndex].is_favorite = true
+                this.loadCurrentSong()
+            },
+        })
+
+        listenEvent({
+            eventName: 'favorite:remove',
+            handler: (e) => {
+                const songIndex = this.songs.findIndex((song) => song.id === Number(e.detail))
+                this.songs[songIndex].is_favorite = false
+                this.loadCurrentSong()
             },
         })
 

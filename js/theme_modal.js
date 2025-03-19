@@ -94,6 +94,8 @@ const app = {
                     },
                     '*'
                 )
+
+                localStorage.setItem('theme', JSON.stringify(themeData))
             })
         })
     },

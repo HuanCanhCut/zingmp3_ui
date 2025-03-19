@@ -168,7 +168,7 @@
                 <aside id="mobile-sidebar">
                     <div class="row">
                         <div class="col l-0 m-0 c-4">
-                            <div class="mobile-sidebar__item">
+                            <div class="mobile-sidebar__item active">
                                 <i class="fa-solid fa-house"></i>
                                 <span>Trang chủ</span>
                             </div>
@@ -241,7 +241,15 @@
                         </button>
                     </div>
                 </div>
-                <aside id="playlist-sidebar"></aside>
+                <aside id="playlist-sidebar">
+                    <header class="playlist-sidebar__header">
+                        <h2 class="playlist-sidebar__title">Bài hát yêu thích</h2>
+                        <button class="playlist-sidebar__close-btn">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </header>
+                    <main class="playlist-sidebar__content"></main>
+                </aside>
             </div>
         </div>
         <script src="./js/toast.js"></script>

@@ -1,4 +1,4 @@
-import { listenEvent } from './helpers/event.js'
+import { listenEvent, sendEvent } from './helpers/event.js'
 
 const $ = document.querySelector.bind(document)
 const $$ = document.querySelectorAll.bind(document)
@@ -16,6 +16,9 @@ const inputSearch = $('#header__input-search')
 const overlay = $('#overlay')
 
 const app = {
+    favoriteSongs: [],
+    currentIndex: 0,
+
     loadHeaderActionUI() {
         const token = localStorage.getItem('token')
 
@@ -86,6 +89,10 @@ const app = {
         // close auth modal when click on overlay
         overlay.addEventListener('click', () => {
             this.closeModal()
+
+            this.favoriteSongs = this.favoriteSongs.filter((favorite) => favorite.is_favorite)
+
+            this.loadPlaylistSidebar()
         })
 
         // listen keydown event
@@ -137,12 +144,104 @@ const app = {
             }
         }
 
-        // Listen custom event
+        $('.playlist-sidebar__close-btn').onclick = () => {
+            $('#playlist-sidebar').classList.remove('active')
+            overlay.classList.remove('active')
 
+            this.favoriteSongs = this.favoriteSongs.filter((favorite) => favorite.is_favorite)
+
+            this.loadPlaylistSidebar()
+        }
+
+        $('.playlist-sidebar__content').onclick = async (e) => {
+            if (!e.target.closest('.playlist__item-heart')) {
+                if (e.target.closest('.content_playlist-item:not(.active)')) {
+                    const songId = e.target.closest('.content_playlist-item').dataset.id
+
+                    this.currentIndex = e.target.closest('.content_playlist-item').dataset.index
+
+                    sendEvent({
+                        eventName: 'favorite:choose-song',
+                        detail: songId,
+                    })
+
+                    this.loadPlaylistSidebar()
+                }
+            }
+
+            if (e.target.closest('.playlist__item-heart')) {
+                const songIndex = Number(e.target.closest('.content_playlist-item')?.getAttribute('data-index'))
+
+                const isFavorite = this.favoriteSongs[songIndex].is_favorite
+
+                this.favoriteSongs[songIndex].is_favorite = !isFavorite
+
+                // fetch api update favorite
+                const token = localStorage.getItem('token')
+
+                if (!token) {
+                    sendEvent({
+                        eventName: 'modal:open-auth-modal',
+                    })
+                    return
+                }
+
+                // add favorite
+                if (!isFavorite) {
+                    await fetch(`https://api.zingmp3.local/api/favorite`, {
+                        method: 'POST',
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            song_id: this.favoriteSongs[songIndex].song.id,
+                        }),
+                    })
+                    sendEvent({
+                        eventName: 'favorite:add',
+                        detail: this.favoriteSongs[songIndex].song.id,
+                    })
+                } else {
+                    // remove favorite
+                    await fetch(`https://api.zingmp3.local/api/favorite/${this.favoriteSongs[songIndex].song.id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    })
+                    sendEvent({
+                        eventName: 'favorite:remove',
+                        detail: this.favoriteSongs[songIndex].song.id,
+                    })
+                }
+
+                this.loadPlaylistSidebar()
+            }
+        }
+
+        // Listen custom event
         listenEvent({
             eventName: 'modal:open-auth-modal',
             handler: () => {
                 this.openAuthModal('login_modal')
+            },
+        })
+
+        listenEvent({
+            eventName: 'favorite:add',
+            handler: async (e) => {
+                await this.getFavoriteSongs()
+                this.loadPlaylistSidebar()
+            },
+        })
+
+        listenEvent({
+            eventName: 'favorite:remove',
+            handler: (e) => {
+                this.favoriteSongs = this.favoriteSongs.filter((favorite) => favorite.song.id !== Number(e.detail))
+
+                this.loadPlaylistSidebar()
             },
         })
     },
@@ -268,9 +367,76 @@ const app = {
         document.documentElement.style.setProperty('--smoke-overlay', themeData.smoke_overlay)
     },
 
-    init() {
+    loadCurrentTheme() {
+        const currentTheme = localStorage.getItem('theme')
+
+        if (currentTheme) {
+            this.handleSetTheme(JSON.parse(currentTheme))
+        }
+    },
+
+    async getFavoriteSongs() {
+        const token = localStorage.getItem('token')
+
+        if (!token) {
+            return
+        }
+
+        const res = await fetch('https://api.zingmp3.local/api/favorite', {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+
+        const data = await res.json()
+
+        this.favoriteSongs = data.data.map((favorite) => {
+            return {
+                ...favorite,
+                is_favorite: true,
+            }
+        })
+    },
+
+    loadPlaylistSidebar() {
+        const playlistSidebar = $('.playlist-sidebar__content')
+
+        playlistSidebar.innerHTML = this.favoriteSongs
+            .map((favorite, index) => {
+                return `
+                <div
+                    style="margin-top: 4px"
+                    class="content_playlist-item ${Number(this.currentIndex) === index ? 'active' : ''}"
+                    data-index="${index}"
+                    data-id="${favorite.song.id}"
+                >
+                    <div class="content_playlist-item-wrapper">
+                        <div class="content_playlist-item-wrapper-img">
+                            <img src="${favorite.song.thumbnail}" alt="" />
+                            <i class="fa-solid fa-play"></i>
+                        </div>
+                        <div class="content_playlist-item-info">
+                            <p class="content_playlist-item-info-title">${favorite.song.name}</p>
+                            <p class="content_playlist-item-info-artist">${favorite.song.artist}</p>
+                        </div>
+                    </div>
+                    <div class="content_playlist-item-actions">
+                        <button class="content_playlist-item-actions-btn playlist__item-heart">
+                            <i class="fa-solid fa-heart ${favorite.is_favorite ? 'active' : ''}"></i>
+                        </button>
+                    </div>
+                </div>
+            `
+            })
+            .join('')
+    },
+
+    async init() {
+        this.loadCurrentTheme()
         this.loadHeaderActionUI()
         this.handleEvent()
+        await this.getFavoriteSongs()
+        this.loadPlaylistSidebar()
     },
 }
 

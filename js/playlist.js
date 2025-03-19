@@ -221,6 +221,16 @@ const playerController = {
         })
 
         listenEvent({
+            eventName: 'favorite:choose-song',
+            handler: (e) => {
+                const songIndex = this.songs.findIndex((song) => song.id === Number(e.detail))
+                this.currentIndex = songIndex
+                this.loadCurrentSong()
+                audio.play()
+            },
+        })
+
+        listenEvent({
             eventName: 'song:play',
             handler: (e) => {
                 this.isPlaying = e.detail
