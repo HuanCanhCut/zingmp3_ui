@@ -31,8 +31,10 @@ const playerController = {
     async getSongs() {
         const token = localStorage.getItem('token')
         const res = await fetch('https://zing-api.huancanhcut.click/api/music', {
+            method: 'GET',
             headers: {
                 Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
             },
         })
         const data = await res.json()
