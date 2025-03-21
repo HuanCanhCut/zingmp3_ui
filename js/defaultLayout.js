@@ -188,7 +188,7 @@ const app = {
 
                 // add favorite
                 if (!isFavorite) {
-                    await fetch(`https://api.zingmp3.local/api/favorite`, {
+                    await fetch(`https://zing-api.huancanhcut.click/api/favorite`, {
                         method: 'POST',
                         headers: {
                             Authorization: `Bearer ${token}`,
@@ -204,12 +204,15 @@ const app = {
                     })
                 } else {
                     // remove favorite
-                    await fetch(`https://api.zingmp3.local/api/favorite/${this.favoriteSongs[songIndex].song.id}`, {
-                        method: 'DELETE',
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    })
+                    await fetch(
+                        `https://zing-api.huancanhcut.click/api/favorite/${this.favoriteSongs[songIndex].song.id}`,
+                        {
+                            method: 'DELETE',
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                            },
+                        }
+                    )
                     sendEvent({
                         eventName: 'favorite:remove',
                         detail: this.favoriteSongs[songIndex].song.id,
@@ -263,7 +266,9 @@ const app = {
                     return async (searchValue) => {
                         clearTimeout(timeoutId)
                         timeoutId = setTimeout(async () => {
-                            const res = await fetch(`https://api.zingmp3.local/api/music/search?query=${searchValue}`)
+                            const res = await fetch(
+                                `https://zing-api.huancanhcut.click/api/music/search?query=${searchValue}`
+                            )
                             const data = await res.json()
 
                             if (Array.isArray(data.musics)) {
@@ -382,7 +387,7 @@ const app = {
             return
         }
 
-        const res = await fetch('https://api.zingmp3.local/api/favorite', {
+        const res = await fetch('https://zing-api.huancanhcut.click/api/favorite', {
             headers: {
                 Authorization: `Bearer ${token}`,
             },

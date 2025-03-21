@@ -18,7 +18,7 @@ const SongApp = {
     isPlaying: false,
     async getSongs() {
         const token = localStorage.getItem('token')
-        const res = await fetch('https://api.zingmp3.local/api/music', {
+        const res = await fetch('https://zing-api.huancanhcut.click/api/music', {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -99,7 +99,7 @@ const SongApp = {
                 this.songs[songIndex].is_favorite = !isFavorite
                 // add favorite
                 if (!isFavorite) {
-                    await fetch(`https://api.zingmp3.local/api/favorite`, {
+                    await fetch(`https://zing-api.huancanhcut.click/api/favorite`, {
                         method: 'POST',
                         headers: {
                             Authorization: `Bearer ${token}`,
@@ -116,7 +116,7 @@ const SongApp = {
                     })
                 } else {
                     // remove favorite
-                    await fetch(`https://api.zingmp3.local/api/favorite/${this.songs[songIndex].id}`, {
+                    await fetch(`https://zing-api.huancanhcut.click/api/favorite/${this.songs[songIndex].id}`, {
                         method: 'DELETE',
                         headers: {
                             Authorization: `Bearer ${token}`,
