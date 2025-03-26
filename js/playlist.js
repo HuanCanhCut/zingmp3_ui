@@ -30,7 +30,7 @@ const playerController = {
 
     async getSongs() {
         const token = localStorage.getItem('token')
-        const res = await fetch('https://api.zingmp3.local/api/music', {
+        const res = await fetch('https://zing-api.huancanhcut.click/api/music', {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -107,7 +107,7 @@ const playerController = {
             sendEvent({ eventName: 'song:is-playing', detail: true })
 
             // increase view count of current song
-            fetch(`https://api.zingmp3.local/api/music/${this.currentSong.id}/view`, {
+            fetch(`https://zing-api.huancanhcut.click/api/music/${this.currentSong.id}/view`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
