@@ -62,12 +62,14 @@ const app = {
                     })
                     break
                 case 'modal:close':
+                    this.closeModal()
+                    break
+                case 'music:add':
                     sendEvent({
                         eventName: 'music:add',
                         detail: e.data.data,
                     })
                     this.closeModal()
-                    break
                 default:
                     break
             }

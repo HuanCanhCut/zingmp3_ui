@@ -112,7 +112,8 @@
 
                     const data = await response.json()
 
-                    window.parent.postMessage({ type: 'modal:close', data: JSON.stringify(data) }, '*')
+                    window.parent.postMessage({ type: 'modal:close' }, '*')
+                    window.parent.postMessage({ type: 'music:add', detail: JSON.stringify(data) }, '*')
                 } catch (error) {
                     if (error.message === '500') {
                         const errorMessage = document.querySelector('.error-message')
