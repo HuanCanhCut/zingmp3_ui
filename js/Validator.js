@@ -91,37 +91,52 @@ function Validator(options) {
     }
 }
 
-Validator.isRequired = function (selector) {
+Validator.isRequired = function (selector, errorMessage) {
     return {
         selector: selector,
         test: function (value) {
-            return value.trim() ? undefined : 'Vui lòng nhập trường này!'
+            return value.trim() ? undefined : errorMessage || 'Vui lòng nhập trường này!'
         },
     }
 }
 
-Validator.isEmail = function (selector) {
+Validator.isEmail = function (selector, errorMessage) {
     return {
         selector: selector,
         test: function (value) {
-            return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value) ? undefined : 'Email không đúng!'
+            return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value)
+                ? undefined
+                : errorMessage || 'Email không đúng định dạng!'
         },
     }
 }
-Validator.isPassword = function (selector, min) {
+Validator.isPassword = function (selector, min, errorMessage) {
     return {
         selector: selector,
         test: function (value) {
-            return value.trim().length >= min ? undefined : `Password phải có ít nhất ${min} ký tự!`
+            return value.trim().length >= min ? undefined : errorMessage || `Password phải có ít nhất ${min} ký tự!`
         },
     }
 }
 
-Validator.isConfirm = function (selector, getConfirmValue) {
+Validator.isConfirm = function (selector, getConfirmValue, errorMessage) {
     return {
         selector: selector,
         test: function (value) {
-            return value.trim() === getConfirmValue() ? undefined : 'Mật khẩu không khớp!'
+            return value.trim() === getConfirmValue() ? undefined : errorMessage || 'Mật khẩu không khớp!'
+        },
+    }
+}
+
+Validator.isUrl = function (selector, errorMessage) {
+    return {
+        selector: selector,
+        test: function (value) {
+            return /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g.test(
+                value
+            )
+                ? undefined
+                : errorMessage || 'URL không hợp lệ!'
         },
     }
 }

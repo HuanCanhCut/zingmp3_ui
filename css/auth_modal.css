@@ -168,6 +168,10 @@ form {
         padding: 0;
     }
 
+    form {
+        padding: 0;
+    }
+
     .form__footer {
         padding: 0;
     }

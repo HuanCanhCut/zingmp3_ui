@@ -23,7 +23,7 @@ const app = {
                     throw new Error('Email is required')
                 }
 
-                const response = await fetch('https://zing-api.huancanhcut.click/api/auth/verify', {
+                const response = await fetch('https://api.zingmp3.local/api/auth/verify', {
                     method: 'POST',
                     body: JSON.stringify({ email: email.value }),
                     headers: {

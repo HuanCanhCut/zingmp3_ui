@@ -32,7 +32,7 @@ const app = {
     },
 
     handleEvent() {
-        // listen message from login modal
+        // listen message from auth modal
         window.addEventListener('message', (e) => {
             switch (e.data.type) {
                 case 'modal:toggle-modal':
@@ -60,6 +60,13 @@ const app = {
                         message: e.data.data.message,
                         type: 'success',
                     })
+                    break
+                case 'modal:close':
+                    sendEvent({
+                        eventName: 'music:add',
+                        detail: e.data.data,
+                    })
+                    this.closeModal()
                     break
                 default:
                     break
@@ -188,35 +195,63 @@ const app = {
 
                 // add favorite
                 if (!isFavorite) {
-                    await fetch(`https://zing-api.huancanhcut.click/api/favorite`, {
-                        method: 'POST',
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            song_id: this.favoriteSongs[songIndex].song.id,
-                        }),
-                    })
-                    sendEvent({
-                        eventName: 'favorite:add',
-                        detail: this.favoriteSongs[songIndex].song.id,
-                    })
-                } else {
-                    // remove favorite
-                    await fetch(
-                        `https://zing-api.huancanhcut.click/api/favorite/${this.favoriteSongs[songIndex].song.id}`,
-                        {
-                            method: 'DELETE',
+                    try {
+                        const res = await fetch(`https://api.zingmp3.local/api/favorite`, {
+                            method: 'POST',
                             headers: {
                                 Authorization: `Bearer ${token}`,
+                                'Content-Type': 'application/json',
                             },
+                            body: JSON.stringify({
+                                song_id: this.favoriteSongs[songIndex].song.id,
+                            }),
+                        })
+
+                        if (!res.ok) {
+                            const errorData = await res.json()
+                            throw new Error(errorData.message || `HTTP error! Status: ${res.status}`)
                         }
-                    )
-                    sendEvent({
-                        eventName: 'favorite:remove',
-                        detail: this.favoriteSongs[songIndex].song.id,
-                    })
+
+                        sendEvent({
+                            eventName: 'favorite:add',
+                            detail: this.favoriteSongs[songIndex].song.id,
+                        })
+                    } catch (error) {
+                        toast({
+                            title: 'Thất bại',
+                            message: error.message,
+                            type: 'error',
+                        })
+                    }
+                } else {
+                    // remove favorite
+                    try {
+                        const res = await fetch(
+                            `https://api.zingmp3.local/api/favorite/${this.favoriteSongs[songIndex].song.id}`,
+                            {
+                                method: 'DELETE',
+                                headers: {
+                                    Authorization: `Bearer ${token}`,
+                                },
+                            }
+                        )
+
+                        if (!res.ok) {
+                            const errorData = await res.json()
+                            throw new Error(errorData.message || `HTTP error! Status: ${res.status}`)
+                        }
+
+                        sendEvent({
+                            eventName: 'favorite:remove',
+                            detail: this.favoriteSongs[songIndex].song.id,
+                        })
+                    } catch (error) {
+                        toast({
+                            title: 'Thất bại',
+                            message: error.message,
+                            type: 'error',
+                        })
+                    }
                 }
 
                 this.loadPlaylistSidebar()
@@ -266,9 +301,7 @@ const app = {
                     return async (searchValue) => {
                         clearTimeout(timeoutId)
                         timeoutId = setTimeout(async () => {
-                            const res = await fetch(
-                                `https://zing-api.huancanhcut.click/api/music/search?query=${searchValue}`
-                            )
+                            const res = await fetch(`https://api.zingmp3.local/api/music/search?query=${searchValue}`)
                             const data = await res.json()
 
                             if (Array.isArray(data.musics)) {
@@ -387,11 +420,16 @@ const app = {
             return
         }
 
-        const res = await fetch('https://zing-api.huancanhcut.click/api/favorite', {
+        const res = await fetch('https://api.zingmp3.local/api/favorite', {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         })
+
+        if (!res.ok) {
+            localStorage.removeItem('token')
+            return
+        }
 
         const data = await res.json()
 
@@ -436,8 +474,27 @@ const app = {
             .join('')
     },
 
+    async getCurrentUser() {
+        const token = localStorage.getItem('token')
+
+        if (!token) {
+            return
+        }
+
+        const res = await fetch('https://api.zingmp3.local/api/me', {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+
+        if (!res.ok) {
+            localStorage.removeItem('token')
+        }
+    },
+
     async init() {
         this.loadCurrentTheme()
+        await this.getCurrentUser()
         this.loadHeaderActionUI()
         this.handleEvent()
         await this.getFavoriteSongs()

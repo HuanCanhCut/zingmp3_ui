@@ -2,6 +2,9 @@ import { listenEvent, sendEvent } from './helpers/event.js'
 
 const playlist = document.querySelector('.home__content_playlist')
 const slider = document.querySelector('.home__content_slider')
+const uploadBtn = document.querySelector('.home__content_playlist_upload-btn')
+const modal = document.querySelector('#modal')
+const overlay = document.querySelector('#overlay')
 
 const homeApp = {
     songs: [],
@@ -9,11 +12,12 @@ const homeApp = {
 
     async getSongs() {
         const token = localStorage.getItem('token')
-        const res = await fetch('https://zing-api.huancanhcut.click/api/music', {
+        const res = await fetch('https://api.zingmp3.local/api/music', {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         })
+
         const data = await res.json()
 
         this.songs = data.musics
@@ -127,36 +131,81 @@ const homeApp = {
 
                 // add favorite
                 if (!isFavorite) {
-                    await fetch(`https://zing-api.huancanhcut.click/api/favorite`, {
-                        method: 'POST',
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            song_id: this.songs[songIndex].id,
-                        }),
-                    })
-                    sendEvent({
-                        eventName: 'favorite:add',
-                        detail: this.songs[songIndex].id,
-                    })
+                    try {
+                        const res = await fetch(`https://api.zingmp3.local/api/favorite`, {
+                            method: 'POST',
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                song_id: this.songs[songIndex].id,
+                            }),
+                        })
+
+                        if (!res.ok) {
+                            const errorData = await res.json()
+                            throw new Error(errorData.message || `HTTP error! Status: ${res.status}`)
+                        }
+
+                        sendEvent({
+                            eventName: 'favorite:add',
+                            detail: this.songs[songIndex].id,
+                        })
+                    } catch (error) {
+                        toast({
+                            title: 'Thất bại',
+                            message: error.message,
+                            type: 'error',
+                        })
+                    }
                 } else {
-                    // remove favorite
-                    await fetch(`https://zing-api.huancanhcut.click/api/favorite/${this.songs[songIndex].id}`, {
-                        method: 'DELETE',
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    })
-                    sendEvent({
-                        eventName: 'favorite:remove',
-                        detail: this.songs[songIndex].id,
-                    })
+                    try {
+                        // remove favorite
+                        const res = await fetch(`https://api.zingmp3.local/api/favorite/${this.songs[songIndex].id}`, {
+                            method: 'DELETE',
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                            },
+                        })
+
+                        if (!res.ok) {
+                            const errorData = await res.json()
+                            throw new Error(errorData.message || `HTTP error! Status: ${res.status}`)
+                        }
+
+                        sendEvent({
+                            eventName: 'favorite:remove',
+                            detail: this.songs[songIndex].id,
+                        })
+                    } catch (error) {
+                        toast({
+                            title: 'Thất bại',
+                            message: error.message,
+                            type: 'error',
+                        })
+                    }
                 }
 
                 this.loadCurrentSong()
             }
+        }
+
+        uploadBtn.onclick = () => {
+            const token = localStorage.getItem('token')
+
+            if (!token) {
+                // open login form
+                sendEvent({
+                    eventName: 'modal:open-auth-modal',
+                })
+                return
+            }
+
+            // open upload form
+            modal.setAttribute('src', `./modal/upload_music_modal.html`)
+            modal.classList.add('active')
+            overlay.classList.add('active')
         }
 
         listenEvent({
@@ -200,6 +249,15 @@ const homeApp = {
             handler: (e) => {
                 const songIndex = this.songs.findIndex((song) => song.id === Number(e.detail))
                 this.songs[songIndex].is_favorite = false
+                this.loadCurrentSong()
+            },
+        })
+
+        listenEvent({
+            eventName: 'music:add',
+            handler: ({ detail }) => {
+                const data = JSON.parse(detail)
+                this.songs.push(data)
                 this.loadCurrentSong()
             },
         })
