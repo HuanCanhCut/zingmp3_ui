@@ -778,6 +778,15 @@
     }
 }
 
+@media screen and (max-width: 860px) {
+    .music__player-info-title {
+        display: none;
+    }
+
+    .music__player-control {
+        width: 320px;
+    }
+}
 @media (max-width: 739px) {
     #header,
     #content {

@@ -157,7 +157,7 @@ const mySong = {
                 const songIndex = this.songs.findIndex((song) => song.id === Number(data.data.id))
 
                 this.songs[songIndex] = data.data
-                // this.loadCurrentSong()
+                this.loadCurrentSong()
             },
         })
     },
