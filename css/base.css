@@ -8,6 +8,7 @@
     --sidebar-width: 240px;
     --sidebar-tablet-width: 70px;
     --music-player-height: 70px;
+    --gray-opacity-50: rgba(255, 255, 255, 0.5);
 
     --text-primary: #fff;
     --text-primary-contradictory: #222;

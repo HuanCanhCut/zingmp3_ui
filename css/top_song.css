@@ -1,0 +1,37 @@
+#content {
+    padding-top: 20px;
+}
+
+.content_playlist-item-level {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: var(--gray-opacity-50);
+}
+
+.content_playlist-item-level h1 {
+    -webkit-text-stroke: 1.5px var(--gray-opacity-50);
+    color: transparent;
+}
+
+.content_playlist-item-info {
+    min-width: 30%;
+}
+
+.content_playlist-item-level h1.first {
+    -webkit-text-stroke: 1.5px rgb(116, 185, 255);
+}
+
+.content_playlist-item-level h1.second {
+    -webkit-text-stroke: 1.5px #4ed8a1;
+}
+
+.content_playlist-item-level h1.third {
+    -webkit-text-stroke: 1.5px #e84393;
+}
+
+.content_playlist-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}

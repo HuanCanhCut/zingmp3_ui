@@ -11,7 +11,7 @@
         <link rel="stylesheet" href="./css/defaultLayout.css" />
         <link rel="stylesheet" href="./css/gird.css" />
         <link rel="stylesheet" href="./css/toast.css" />
-        <link rel="stylesheet" href="./css/my_song.css" />
+        <link rel="stylesheet" href="./css/top_song.css" />
     </head>
     <body>
         <div>
@@ -19,14 +19,6 @@
             <div id="overlay"></div>
             <div class="app">
                 <iframe src="" frameborder="0" id="modal"></iframe>
-                <!-- Delete confirm modal -->
-                <div class="delete-confirm-modal">
-                    <h1>Bạn có chắc chắc muốn xóa bài hát này không?</h1>
-                    <div class="delete-confirm-modal-actions">
-                        <button class="delete-confirm-btn-cancel">Hủy</button>
-                        <button class="delete-confirm-btn-delete">Xóa</button>
-                    </div>
-                </div>
                 <div class="app__sidebar-container">
                     <aside id="sidebar">
                         <div class="sidebar__logo">
@@ -44,7 +36,7 @@
                                     </div>
                                 </div>
                             </a>
-                            <a href="./my-songs.html" class="sidebar__menu-item active">
+                            <a href="./my-songs.html" class="sidebar__menu-item">
                                 <div class="row no-gutters">
                                     <div class="col l-2 m-12 c-12">
                                         <i class="fa-solid fa-compact-disc"></i>
@@ -54,7 +46,7 @@
                                     </div>
                                 </div>
                             </a>
-                            <a href="./top.html" class="sidebar__menu-item">
+                            <a href="./top.html" class="sidebar__menu-item active">
                                 <div class="row no-gutters">
                                     <div class="col l-2 m-12 c-12">
                                         <i class="fa-solid fa-chart-simple"></i>
@@ -152,13 +144,13 @@
                             </a>
                         </div>
                         <div class="col l-0 m-0 c-4">
-                            <a href="./my-songs.html" class="mobile-sidebar__item active">
+                            <a href="./my-songs.html" class="mobile-sidebar__item">
                                 <i class="fa-solid fa-compact-disc"></i>
                                 <span>Bài hát</span>
                             </a>
                         </div>
                         <div class="col l-0 m-0 c-4">
-                            <a href="./top.html" class="mobile-sidebar__item">
+                            <a href="./top.html" class="mobile-sidebar__item active">
                                 <i class="fa-solid fa-chart-simple"></i>
                                 <span>Bảng xếp hạng</span>
                             </a>
@@ -234,6 +226,6 @@
         <script type="module" src="./js/defaultLayout.js"></script>
         <script type="module" src="./js/helpers/event.js"></script>
         <script type="module" src="./js/playlist.js"></script>
-        <script type="module" src="./js/my_song.js"></script>
+        <script type="module" src="./js/top_songs.js"></script>
     </body>
 </html>

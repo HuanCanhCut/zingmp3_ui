@@ -428,6 +428,7 @@ const app = {
         document.documentElement.style.setProperty('--text-primary-contradictory', themeData.text_primary_contradictory)
         document.documentElement.style.setProperty('--border-gray-color', themeData.border_gray_color)
         document.documentElement.style.setProperty('--smoke-overlay', themeData.smoke_overlay)
+        document.documentElement.style.setProperty('--gray-opacity-50', themeData.gray_opacity_50)
     },
 
     loadCurrentTheme() {
