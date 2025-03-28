@@ -192,6 +192,17 @@ const homeApp = {
                 this.loadCurrentSong()
             },
         })
+
+        listenEvent({
+            eventName: 'music:update',
+            handler: ({ detail }) => {
+                const data = JSON.parse(detail)
+
+                const songIndex = this.songs.findIndex((song) => song.id === Number(data.data.id))
+                this.songs[songIndex] = data.data
+                this.loadCurrentSong()
+            },
+        })
     },
 
     async handleFavoriteSong(songIndex) {

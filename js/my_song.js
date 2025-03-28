@@ -1,7 +1,8 @@
-import { sendEvent } from './helpers/event.js'
+import { sendEvent, listenEvent } from './helpers/event.js'
 
 const content = document.querySelector('#content')
 const overlay = document.querySelector('#overlay')
+const modal = document.querySelector('#modal')
 const deleteConfirmModal = document.querySelector('.delete-confirm-modal')
 const deleteConfirmBtnDelete = deleteConfirmModal.querySelector('.delete-confirm-btn-delete')
 const deleteConfirmBtnCancel = deleteConfirmModal.querySelector('.delete-confirm-btn-cancel')
@@ -88,7 +89,6 @@ const mySong = {
     handleEvent() {
         content.onclick = (e) => {
             // if click delete btn
-
             if (e.target.closest('.playlist__item-delete')) {
                 const songIndex = Number(e.target.closest('.content_playlist-item').getAttribute('data-index'))
 
@@ -107,12 +107,59 @@ const mySong = {
                     overlay.classList.remove('active')
                 }
             }
+
+            // if click edit btn
+            if (e.target.closest('.playlist__item-edit')) {
+                const songIndex = Number(e.target.closest('.content_playlist-item').getAttribute('data-index'))
+
+                if (songIndex !== undefined) {
+                    const songId = this.songs[songIndex].id
+
+                    // open iframe modal
+
+                    const song = this.songs[songIndex]
+                    const url = `
+                        modal/update_music_modal.html?id=${songId}&name=${song.name}&artist=${song.artist}&thumbnail=${song.thumbnail}&song_url=${song.url}
+                    `
+
+                    modal.src = url
+
+                    modal.classList.add('active')
+                    overlay.classList.add('active')
+                }
+            }
+
+            // click to play song
+            if (
+                e.target.closest('.content_playlist-item:not(.active)') &&
+                !e.target.closest('.playlist__item-edit') &&
+                !e.target.closest('.playlist__item-delete')
+            ) {
+                const songIndex = Number(e.target.closest('.content_playlist-item').getAttribute('data-index'))
+
+                this.currentIndex = songIndex
+
+                this.loadCurrentSong()
+
+                sendEvent({ eventName: 'song:choose-song', detail: songIndex })
+            }
         }
 
         overlay.onclick = () => {
             deleteConfirmModal.classList.remove('active')
             overlay.classList.remove('active')
         }
+
+        listenEvent({
+            eventName: 'music:update',
+            handler: ({ detail }) => {
+                const data = JSON.parse(detail)
+                const songIndex = this.songs.findIndex((song) => song.id === Number(data.data.id))
+
+                this.songs[songIndex] = data.data
+                // this.loadCurrentSong()
+            },
+        })
     },
 
     async handleDeleteSong(songIndex) {

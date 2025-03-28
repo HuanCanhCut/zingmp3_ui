@@ -220,18 +220,13 @@ const playerController = {
         listenEvent({
             eventName: 'song:choose-song',
             handler: (e) => {
+                const currentTime = audio.currentTime
+
                 this.currentIndex = e.detail
                 this.loadCurrentSong()
-                audio.play()
-            },
-        })
 
-        listenEvent({
-            eventName: 'favorite:choose-song',
-            handler: (e) => {
-                const songIndex = this.songs.findIndex((song) => song.id === Number(e.detail))
-                this.currentIndex = songIndex
-                this.loadCurrentSong()
+                audio.currentTime = currentTime
+
                 audio.play()
             },
         })
@@ -251,6 +246,14 @@ const playerController = {
                 const data = JSON.parse(detail)
                 this.songs.unshift(data.data)
                 this.loadCurrentSong()
+
+                const currentTime = audio.currentTime
+
+                this.loadCurrentSong()
+
+                audio.currentTime = currentTime
+
+                audio.play()
             },
         })
 
@@ -259,6 +262,23 @@ const playerController = {
             handler: ({ detail }) => {
                 this.songs = detail.songs
                 this.loadCurrentSong()
+            },
+        })
+
+        listenEvent({
+            eventName: 'music:update',
+            handler: ({ detail }) => {
+                const data = JSON.parse(detail)
+                const songIndex = this.songs.findIndex((song) => song.id === Number(data.data.id))
+                this.songs[songIndex] = data.data
+
+                const currentTime = audio.currentTime
+
+                this.loadCurrentSong()
+
+                audio.currentTime = currentTime
+
+                audio.play()
             },
         })
     },

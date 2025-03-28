@@ -77,6 +77,20 @@ const app = {
                     })
 
                     this.closeModal()
+                case 'music:update':
+                    sendEvent({
+                        eventName: 'music:update',
+                        detail: e.data.detail,
+                    })
+
+                    toast({
+                        title: 'Thành công',
+                        message: 'Cập nhật bài hát thành công',
+                        type: 'success',
+                    })
+
+                    this.closeModal()
+
                 default:
                     break
             }

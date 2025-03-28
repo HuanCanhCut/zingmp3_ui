@@ -1,3 +1,28 @@
 .main {
     text-align: center;
 }
+
+.form-group-upload-audio {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    text-align: left;
+}
+
+.form-group-upload-audio .form-group-upload-audio-input-wrapper {
+    flex: 1;
+}
+
+.form-control-upload-audio {
+    background-color: #000;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
