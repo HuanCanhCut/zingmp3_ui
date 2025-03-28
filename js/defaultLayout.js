@@ -67,8 +67,15 @@ const app = {
                 case 'music:add':
                     sendEvent({
                         eventName: 'music:add',
-                        detail: e.data.data,
+                        detail: e.data.detail,
                     })
+
+                    toast({
+                        title: 'Thành công',
+                        message: 'Thêm bài hát thành công',
+                        type: 'success',
+                    })
+
                     this.closeModal()
                 default:
                     break

@@ -115,80 +115,7 @@ const homeApp = {
             if (e.target.closest('.playlist__item-heart')) {
                 const songIndex = Number(e.target.closest('.home__content_playlist-item')?.getAttribute('data-index'))
 
-                const isFavorite = this.songs[songIndex].is_favorite
-
-                this.songs[songIndex].is_favorite = !isFavorite
-
-                // fetch api update favorite
-                const token = localStorage.getItem('token')
-
-                if (!token) {
-                    sendEvent({
-                        eventName: 'modal:open-auth-modal',
-                    })
-                    return
-                }
-
-                // add favorite
-                if (!isFavorite) {
-                    try {
-                        const res = await fetch(`https://zing-api.huancanhcut.click/api/favorite`, {
-                            method: 'POST',
-                            headers: {
-                                Authorization: `Bearer ${token}`,
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                song_id: this.songs[songIndex].id,
-                            }),
-                        })
-
-                        if (!res.ok) {
-                            const errorData = await res.json()
-                            throw new Error(errorData.message || `HTTP error! Status: ${res.status}`)
-                        }
-
-                        sendEvent({
-                            eventName: 'favorite:add',
-                            detail: this.songs[songIndex].id,
-                        })
-                    } catch (error) {
-                        toast({
-                            title: 'Thất bại',
-                            message: error.message,
-                            type: 'error',
-                        })
-                    }
-                } else {
-                    try {
-                        // remove favorite
-                        const res = await fetch(
-                            `https://zing-api.huancanhcut.click/api/favorite/${this.songs[songIndex].id}`,
-                            {
-                                method: 'DELETE',
-                                headers: {
-                                    Authorization: `Bearer ${token}`,
-                                },
-                            }
-                        )
-
-                        if (!res.ok) {
-                            const errorData = await res.json()
-                            throw new Error(errorData.message || `HTTP error! Status: ${res.status}`)
-                        }
-
-                        sendEvent({
-                            eventName: 'favorite:remove',
-                            detail: this.songs[songIndex].id,
-                        })
-                    } catch (error) {
-                        toast({
-                            title: 'Thất bại',
-                            message: error.message,
-                            type: 'error',
-                        })
-                    }
-                }
+                this.handleFavoriteSong(songIndex)
 
                 this.loadCurrentSong()
             }
@@ -260,10 +187,85 @@ const homeApp = {
             eventName: 'music:add',
             handler: ({ detail }) => {
                 const data = JSON.parse(detail)
-                this.songs.push(data)
+
+                this.songs.unshift(data.data)
                 this.loadCurrentSong()
             },
         })
+    },
+
+    async handleFavoriteSong(songIndex) {
+        const isFavorite = this.songs[songIndex].is_favorite
+
+        this.songs[songIndex].is_favorite = !isFavorite
+
+        // fetch api update favorite
+        const token = localStorage.getItem('token')
+
+        if (!token) {
+            sendEvent({
+                eventName: 'modal:open-auth-modal',
+            })
+            return
+        }
+
+        // add favorite
+        if (!isFavorite) {
+            try {
+                const res = await fetch(`https://zing-api.huancanhcut.click/api/favorite`, {
+                    method: 'POST',
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        song_id: this.songs[songIndex].id,
+                    }),
+                })
+
+                if (!res.ok) {
+                    const errorData = await res.json()
+                    throw new Error(errorData.message || `HTTP error! Status: ${res.status}`)
+                }
+
+                sendEvent({
+                    eventName: 'favorite:add',
+                    detail: this.songs[songIndex].id,
+                })
+            } catch (error) {
+                toast({
+                    title: 'Thất bại',
+                    message: error.message,
+                    type: 'error',
+                })
+            }
+        } else {
+            try {
+                // remove favorite
+                const res = await fetch(`https://zing-api.huancanhcut.click/api/favorite/${this.songs[songIndex].id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                })
+
+                if (!res.ok) {
+                    const errorData = await res.json()
+                    throw new Error(errorData.message || `HTTP error! Status: ${res.status}`)
+                }
+
+                sendEvent({
+                    eventName: 'favorite:remove',
+                    detail: this.songs[songIndex].id,
+                })
+            } catch (error) {
+                toast({
+                    title: 'Thất bại',
+                    message: error.message,
+                    type: 'error',
+                })
+            }
+        }
     },
 
     songActiveIntoView() {

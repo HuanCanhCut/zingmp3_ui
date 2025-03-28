@@ -126,6 +126,13 @@ form {
     padding: 10px;
     cursor: pointer;
     margin-top: 10px;
+    box-shadow: 0 3px 0px orangered;
+    transition: all linear 0.05s;
+}
+
+.form__button:active {
+    box-shadow: none;
+    transform: translateY(3px);
 }
 
 .error-message {

@@ -249,7 +249,15 @@ const playerController = {
             eventName: 'music:add',
             handler: ({ detail }) => {
                 const data = JSON.parse(detail)
-                this.songs.push(data)
+                this.songs.unshift(data.data)
+                this.loadCurrentSong()
+            },
+        })
+
+        listenEvent({
+            eventName: 'music:new-songs',
+            handler: ({ detail }) => {
+                this.songs = detail.songs
                 this.loadCurrentSong()
             },
         })

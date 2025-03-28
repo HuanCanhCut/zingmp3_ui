@@ -1,1 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Zing Mp3 - Huấn Cánh Cụt</title>
+        <link rel="icon" href="./assets/favicon.ico" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+        <link rel="stylesheet" href="./css/base.css" />
+        <link rel="stylesheet" href="./css/defaultLayout.css" />
+        <link rel="stylesheet" href="./css/gird.css" />
+        <link rel="stylesheet" href="./css/toast.css" />
+        <link rel="stylesheet" href="./css/my_song.css" />
+    </head>
+    <body>
+        <div>
+            <div id="toast"></div>
+            <div id="overlay"></div>
+            <div class="app">
+                <iframe src="" frameborder="0" id="modal"></iframe>
+                <!-- Delete confirm modal -->
+                <div class="delete-confirm-modal">
+                    <h1>Bạn có chắc chắc muốn xóa bài hát này không?</h1>
+                    <div class="delete-confirm-modal-actions">
+                        <button class="delete-confirm-btn-cancel">Hủy</button>
+                        <button class="delete-confirm-btn-delete">Xóa</button>
+                    </div>
+                </div>
+                <div class="app__sidebar-container">
+                    <aside id="sidebar">
+                        <div class="sidebar__logo">
+                            <img src="./assets/pc-logo.svg" alt="logo" class="sidebar__logo-img c-0 m-0 l-8" />
+                            <img src="./assets/mobile-logo.svg" alt="logo" class="sidebar__logo-img-mobile l-0" />
+                        </div>
+                        <div class="sidebar__menu">
+                            <a href="./index.html" class="sidebar__menu-item">
+                                <div class="row no-gutters">
+                                    <div class="col l-2 m-12 c-12">
+                                        <i class="fa-solid fa-house"></i>
+                                    </div>
+                                    <div class="col l-10 m-0 c-0">
+                                        <p class="sidebar__menu-item-title">Trang chủ</p>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="./my-songs.html" class="sidebar__menu-item active">
+                                <div class="row no-gutters">
+                                    <div class="col l-2 m-12 c-12">
+                                        <i class="fa-solid fa-compact-disc"></i>
+                                    </div>
+                                    <div class="col l-10 m-0 c-0">
+                                        <p class="sidebar__menu-item-title">Bài hát của tôi</p>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="./top-100.html" class="sidebar__menu-item">
+                                <div class="row no-gutters">
+                                    <div class="col l-2 m-12 c-12">
+                                        <i class="fa-solid fa-chart-simple"></i>
+                                    </div>
+                                    <div class="col l-10 m-0 c-0">
+                                        <p class="sidebar__menu-item-title">Top 100</p>
+                                    </div>
+                                </div>
+                            </a>
 
+                            <div class="upgrade-account">
+                                <p class="upgrade-account__title">Nghe nhạc không quảng cáo cùng kho nhạc vip</p>
+                                <button class="upgrade-account__btn">NÂNG CẤP VIP</button>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+                <div class="content-container">
+                    <div class="gird">
+                        <div class="row no-gutters">
+                            <div class="col l-12 m-12 c-12">
+                                <header id="header">
+                                    <nav id="nav">
+                                        <ul class="nav__list">
+                                            <li class="nav__item nav--prev">
+                                                <i class="fa-solid fa-arrow-left"></i>
+                                            </li>
+                                            <li class="nav__item nav--next">
+                                                <i class="fa-solid fa-arrow-right"></i>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                    <div class="header__search-wrapper">
+                                        <div class="header__search-wrapper-input">
+                                            <input
+                                                type="text"
+                                                id="header__input-search"
+                                                placeholder="Tìm kiếm bài hát"
+                                            />
+                                            <i class="fa-solid fa-magnifying-glass header__search-icon"></i>
+                                        </div>
+                                        <div class="header__search-wrapper-input-result">
+                                            <span class="header__search-wrapper-input-result-title">Bài hát</span>
+
+                                            <div class="header__search-wrapper-input-result-list"></div>
+                                        </div>
+                                    </div>
+                                    <div class="header__actions">
+                                        <button class="header__actions-theme-btn">
+                                            <i class="fa-solid fa-shirt"></i>
+                                        </button>
+                                        <div class="header__actions_auth active">
+                                            <button class="header__actions-register-btn">Đăng ký</button>
+                                            <button class="header__actions-login-btn">Đăng nhập</button>
+                                        </div>
+                                        <div class="header__actions_user">
+                                            <div class="header__actions-user-avatar-wrapper">
+                                                <img
+                                                    src="./assets/mobile-logo.svg"
+                                                    alt=""
+                                                    class="header__actions-user-avatar"
+                                                />
+                                                <div class="header__actions-user-avatar-popper">
+                                                    <button
+                                                        data-type="my-songs"
+                                                        class="header__actions-user-avatar-popper-btn"
+                                                    >
+                                                        <i class="fa-solid fa-music"></i>
+                                                        <span>Bài hát của tôi</span>
+                                                    </button>
+                                                    <button
+                                                        data-type="logout"
+                                                        class="header__actions-user-avatar-popper-btn"
+                                                    >
+                                                        <i class="fa-solid fa-right-from-bracket"></i>
+                                                        <span>Đăng xuất</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </header>
+                                <main id="content"></main>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <aside id="mobile-sidebar">
+                    <div class="row">
+                        <div class="col l-0 m-0 c-4">
+                            <div class="mobile-sidebar__item active">
+                                <i class="fa-solid fa-house"></i>
+                                <span>Trang chủ</span>
+                            </div>
+                        </div>
+                        <div class="col l-0 m-0 c-4">
+                            <div class="mobile-sidebar__item">
+                                <i class="fa-solid fa-compact-disc"></i>
+                                <span>Bài hát</span>
+                            </div>
+                        </div>
+                        <div class="col l-0 m-0 c-4">
+                            <div class="mobile-sidebar__item">
+                                <i class="fa-solid fa-chart-simple"></i>
+                                <span>Top 100</span>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+
+                <div class="music__player">
+                    <audio src="" id="music__player-audio" hidden></audio>
+                    <div class="music_player-info">
+                        <img
+                            class="music__player-info-thumb"
+                            src="https://cdn11.dienmaycholon.vn/filewebdmclnew/public/userupload/files/Image%20FP_2024/meme-meo-4.jpg"
+                            alt=""
+                        />
+                        <div class="music__player-info-title">
+                            <p class="music__player-info-title-name">Tên bài hát</p>
+                            <p class="music__player-info-title-artist">Tên ca sĩ</p>
+                        </div>
+                    </div>
+
+                    <div class="music__player-control">
+                        <div class="music__player-control-actions">
+                            <button class="music__player-control-actions-btn btn-repeat">
+                                <i class="fas fa-redo"></i>
+                            </button>
+                            <button class="music__player-control-actions-btn btn-prev">
+                                <i class="fas fa-step-backward"></i>
+                            </button>
+                            <button class="music__player-control-actions-btn btn-toggle-play">
+                                <i class="fa-solid fa-play play-icon"></i>
+                                <i class="fa-sharp fa-regular fa-circle-pause pause-icon"></i>
+                            </button>
+                            <button class="music__player-control-actions-btn btn-next">
+                                <i class="fas fa-step-forward"></i>
+                            </button>
+                            <button class="music__player-control-actions-btn btn-random">
+                                <i class="fas fa-random"></i>
+                            </button>
+                        </div>
+                        <div class="music__player-control-progress-wrapper">
+                            <span class="current-time">00:00</span>
+                            <input
+                                type="range"
+                                id="music__player-control-progress"
+                                value="0"
+                                min="0"
+                                max="100"
+                                step="0.1"
+                            />
+                            <span class="duration-song">00:00</span>
+                        </div>
+                    </div>
+
+                    <div class="music__player-action">
+                        <button class="music__player-action-btn open-playlist-sidebar">
+                            <i class="fa-solid fa-list"></i>
+                        </button>
+                    </div>
+                </div>
+                <aside id="playlist-sidebar">
+                    <header class="playlist-sidebar__header">
+                        <h2 class="playlist-sidebar__title">Bài hát yêu thích</h2>
+                        <button class="playlist-sidebar__close-btn">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </header>
+                    <main class="playlist-sidebar__content"></main>
+                </aside>
+            </div>
+        </div>
+        <script src="./js/toast.js"></script>
+        <script type="module" src="./js/defaultLayout.js"></script>
+        <script type="module" src="./js/helpers/event.js"></script>
+        <script type="module" src="./js/playlist.js"></script>
+        <script type="module" src="./js/my_song.js"></script>
+    </body>
+</html>

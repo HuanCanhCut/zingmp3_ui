@@ -381,6 +381,12 @@
     background: var(--linear-gradient-primary);
     color: #fff;
     font-size: 1.4rem;
+    box-shadow: 0 3px 0px orangered;
+}
+
+.header__actions-login-btn:active {
+    box-shadow: none;
+    transform: translateY(3px);
 }
 
 .header__actions-theme-btn,
