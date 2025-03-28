@@ -145,6 +145,10 @@ const app = {
                     case 'logout':
                         localStorage.removeItem('token')
                         this.loadHeaderActionUI()
+                        sendEvent({
+                            eventName: 'logout',
+                            detail: true,
+                        })
                         break
                     case 'my-songs':
                         break

@@ -102,6 +102,13 @@ const SongApp = {
 
                 const token = localStorage.getItem('token')
 
+                if (!token) {
+                    sendEvent({
+                        eventName: 'modal:open-auth-modal',
+                    })
+                    return
+                }
+
                 this.songs[songIndex].is_favorite = !isFavorite
                 // add favorite
                 if (!isFavorite) {

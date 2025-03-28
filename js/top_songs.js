@@ -19,13 +19,10 @@ const topSongs = {
 
             sendEvent({
                 eventName: 'music:new-songs',
-                detail: {
-                    songs: [...data.songs, ...data.songs, ...data.songs, ...data.songs, ...data.songs],
-                },
+                detail: data,
             })
 
             this.songs = data.songs
-            this.songs = [...this.songs, ...this.songs, ...this.songs, ...this.songs, ...this.songs]
         } catch (error) {}
     },
 
@@ -160,8 +157,6 @@ const topSongs = {
     async handleFavoriteSong(songIndex) {
         const isFavorite = this.songs[songIndex].is_favorite
 
-        this.songs[songIndex].is_favorite = !isFavorite
-
         // fetch api update favorite
         const token = localStorage.getItem('token')
 
@@ -171,6 +166,8 @@ const topSongs = {
             })
             return
         }
+
+        this.songs[songIndex].is_favorite = !isFavorite
 
         // add favorite
         if (!isFavorite) {

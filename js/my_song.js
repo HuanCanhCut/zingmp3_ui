@@ -160,6 +160,16 @@ const mySong = {
                 this.loadCurrentSong()
             },
         })
+
+        listenEvent({
+            eventName: 'logout',
+            handler: () => {
+                this.songs = []
+                this.loadCurrentSong()
+                this.currentIndex = 0
+                this.init()
+            },
+        })
     },
 
     async handleDeleteSong(songIndex) {
@@ -199,10 +209,29 @@ const mySong = {
     },
 
     async init() {
-        await this.getMySongs()
-        this.defineProperties()
-        this.loadCurrentSong()
-        this.handleEvent()
+        const token = localStorage.getItem('token')
+
+        if (!token) {
+            modal.src = 'modal/login_modal.html'
+            modal.classList.add('active')
+            overlay.classList.add('active')
+
+            window.addEventListener('message', async (e) => {
+                switch (e.data.type) {
+                    case 'modal:auth-success':
+                        await this.getMySongs()
+                        this.defineProperties()
+                        this.loadCurrentSong()
+                        this.handleEvent()
+                        break
+                }
+            })
+        } else {
+            await this.getMySongs()
+            this.defineProperties()
+            this.loadCurrentSong()
+            this.handleEvent()
+        }
     },
 }
 

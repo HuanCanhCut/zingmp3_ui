@@ -208,8 +208,6 @@ const homeApp = {
     async handleFavoriteSong(songIndex) {
         const isFavorite = this.songs[songIndex].is_favorite
 
-        this.songs[songIndex].is_favorite = !isFavorite
-
         // fetch api update favorite
         const token = localStorage.getItem('token')
 
@@ -219,6 +217,8 @@ const homeApp = {
             })
             return
         }
+
+        this.songs[songIndex].is_favorite = !isFavorite
 
         // add favorite
         if (!isFavorite) {
