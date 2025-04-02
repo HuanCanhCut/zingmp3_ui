@@ -47,7 +47,6 @@ const app = {
                     })
                     this.loadHeaderActionUI()
                     break
-
                 case 'theme:apply':
                     const themeData = e.data.data
 
@@ -77,6 +76,7 @@ const app = {
                     })
 
                     this.closeModal()
+                    break
                 case 'music:update':
                     sendEvent({
                         eventName: 'music:update',
@@ -90,7 +90,14 @@ const app = {
                     })
 
                     this.closeModal()
-
+                    break
+                case 'modal:toast':
+                    toast({
+                        title: 'Thông báo',
+                        message: e.data.detail,
+                        type: 'info',
+                    })
+                    break
                 default:
                     break
             }

@@ -71,6 +71,8 @@
         </div>
     </body>
     <script src="../js/Validator.js"></script>
+    <script src="../js/base_modal.js"></script>
+
     <script>
         Validator({
             form: '#upload_music_form',
@@ -98,6 +100,13 @@
                 formData.append('file', audio)
 
                 try {
+                    window.parent.postMessage(
+                        {
+                            type: 'modal:toast',
+                            detail: 'Bài hát của bạn đang được tải lên, quá trình này có thể mất ít phút, vui lòng chờ đợi',
+                        },
+                        '*'
+                    )
                     window.parent.postMessage({ type: 'modal:close' }, '*')
 
                     const response = await fetch('https://zing-api.huancanhcut.click/api/music/upload', {
@@ -125,5 +134,4 @@
             },
         })
     </script>
-    <script src="../js/base_modal.js"></script>
 </html>
