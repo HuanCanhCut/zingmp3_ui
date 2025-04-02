@@ -125,10 +125,5 @@
             },
         })
     </script>
-    <script>
-        const closeModalBtn = document.querySelector('.close-modal-btn')
-        closeModalBtn.addEventListener('click', () => {
-            window.parent.postMessage({ type: 'modal:close' }, '*')
-        })
-    </script>
+    <script src="../js/base_modal.js"></script>
 </html>

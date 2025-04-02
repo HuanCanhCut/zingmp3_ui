@@ -82,10 +82,9 @@ function Validator(options) {
             }
 
             let inputElement = document.querySelector(rule.selector)
+
             inputElement.onblur = () => {
-                if (inputElement.value === '') {
-                    invalid(inputElement, rule)
-                }
+                invalid(inputElement, rule)
             }
         }
     }

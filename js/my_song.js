@@ -48,33 +48,33 @@ const mySong = {
     renderMySongs() {
         const html = this.songs.map((song, index) => {
             return `
-                <div
-                    class="content_playlist-item ${Number(this.currentIndex) === index ? 'active' : ''}"
-                    data-index="${index}"
-                >
-                    <div class="content_playlist-item-wrapper">
-                        <div class="content_playlist-item-wrapper-img">
-                            <img
-                                src="${song.thumbnail}"
-                                alt=""
-                            />
-                            <i class="fa-solid fa-play"></i>
+                    <div
+                        class="content_playlist-item ${Number(this.currentIndex) === index ? 'active' : ''}"
+                        data-index="${index}"
+                    >
+                        <div class="content_playlist-item-wrapper">
+                            <div class="content_playlist-item-wrapper-img">
+                                <img
+                                    src="${song.thumbnail}"
+                                    alt=""
+                                />
+                                <i class="fa-solid fa-play"></i>
+                            </div>
+                            <div class="content_playlist-item-info">
+                                <p class="content_playlist-item-info-title">${song.name}</p>
+                                <p class="content_playlist-item-info-artist">${song.artist}</p>
+                            </div>
                         </div>
-                        <div class="content_playlist-item-info">
-                            <p class="content_playlist-item-info-title">${song.name}</p>
-                            <p class="content_playlist-item-info-artist">${song.artist}</p>
+                        <div class="content_playlist-item-actions">
+                            <button class="content_playlist-item-actions-btn playlist__item-edit">
+                                <i class="fa-solid fa-square-pen"></i>
+                            </button>
+                            <button class="content_playlist-item-actions-btn playlist__item-delete">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
                         </div>
                     </div>
-                    <div class="content_playlist-item-actions">
-                        <button class="content_playlist-item-actions-btn playlist__item-edit">
-                            <i class="fa-solid fa-square-pen"></i>
-                        </button>
-                        <button class="content_playlist-item-actions-btn playlist__item-delete">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </button>
-                    </div>
-                </div>
-            `
+                `
         })
 
         return html
@@ -119,8 +119,8 @@ const mySong = {
 
                     const song = this.songs[songIndex]
                     const url = `
-                        modal/update_music_modal.html?id=${songId}&name=${song.name}&artist=${song.artist}&thumbnail=${song.thumbnail}&song_url=${song.url}
-                    `
+                            modal/update_music_modal.html?id=${songId}&name=${song.name}&artist=${song.artist}&thumbnail=${song.thumbnail}&song_url=${song.url}
+                        `
 
                     modal.src = url
 

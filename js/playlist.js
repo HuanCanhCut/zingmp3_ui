@@ -277,8 +277,6 @@ const playerController = {
                 this.loadCurrentSong()
 
                 audio.currentTime = currentTime
-
-                audio.play()
             },
         })
     },
