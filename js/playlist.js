@@ -279,6 +279,16 @@ const playerController = {
                 audio.currentTime = currentTime
             },
         })
+
+        listenEvent({
+            eventName: 'favorite:choose-song',
+            handler: (e) => {
+                const songIndex = this.songs.findIndex((song) => song.id === Number(e.detail))
+                this.currentIndex = songIndex
+                this.loadCurrentSong()
+                audio.play()
+            },
+        })
     },
 
     nextSong() {
