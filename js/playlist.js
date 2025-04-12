@@ -220,12 +220,10 @@ const playerController = {
         listenEvent({
             eventName: 'song:choose-song',
             handler: (e) => {
-                const currentTime = audio.currentTime
-
                 this.currentIndex = e.detail
                 this.loadCurrentSong()
 
-                audio.currentTime = currentTime
+                audio.currentTime = 0
 
                 audio.play()
             },
