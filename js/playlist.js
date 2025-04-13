@@ -272,9 +272,15 @@ const playerController = {
 
                 const currentTime = audio.currentTime
 
+                const audioIsPlaying = !audio.paused
+
                 this.loadCurrentSong()
 
                 audio.currentTime = currentTime
+
+                if (audioIsPlaying) {
+                    audio.play()
+                }
             },
         })
 

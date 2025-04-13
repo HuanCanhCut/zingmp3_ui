@@ -200,7 +200,14 @@ const homeApp = {
 
                 const songIndex = this.songs.findIndex((song) => song.id === Number(data.data.id))
                 this.songs[songIndex] = data.data
+
+                const audioIsPlaying = !audio.paused
+
                 this.loadCurrentSong()
+
+                if (audioIsPlaying) {
+                    audio.play()
+                }
             },
         })
     },

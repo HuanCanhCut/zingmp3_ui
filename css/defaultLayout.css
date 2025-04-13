@@ -408,10 +408,6 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
-#modal.active {
-    display: block;
-}
-
 .header__actions_auth {
     display: none;
 }
