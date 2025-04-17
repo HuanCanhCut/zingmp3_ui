@@ -7,7 +7,7 @@
     background-size: cover;
     background-repeat: no-repeat;
     font-size: 1.6rem;
-    transition: all linear 0.15s;
+    transition: all linear 0.3s;
     color: var(--text-primary-contradictory);
     display: flex;
 }
