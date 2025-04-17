@@ -195,7 +195,7 @@ const homeApp = {
 
         listenEvent({
             eventName: 'music:update',
-            handler: ({ detail }) => {
+            handler: async ({ detail }) => {
                 const data = JSON.parse(detail)
 
                 const songIndex = this.songs.findIndex((song) => song.id === Number(data.data.id))
@@ -206,7 +206,9 @@ const homeApp = {
                 this.loadCurrentSong()
 
                 if (audioIsPlaying) {
-                    audio.play()
+                    try {
+                        await audio.play()
+                    } catch (error) {}
                 }
             },
         })
