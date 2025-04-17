@@ -699,16 +699,17 @@
     color: rgb(255, 96, 122);
 }
 
+.music__player-control-actions-btn.btn-next:active i,
+.music__player-control-actions-btn.btn-prev:active i {
+    color: rgb(255, 96, 122);
+}
+
 .music__player-control-actions-btn i {
     line-height: 0;
 }
 
 .music__player-control-actions-btn:hover {
     background-color: var(--smoke-overlay);
-}
-
-.music__player-control-actions-btn:hover i {
-    color: rgb(255, 175, 188);
 }
 
 .music__player-control-progress-wrapper {
