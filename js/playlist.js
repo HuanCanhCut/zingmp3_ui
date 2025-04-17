@@ -94,8 +94,10 @@ const playerController = {
             overlay.classList.remove('active')
         }
 
-        togglePlayBtn.onclick = () => {
-            this.isPlaying ? audio.pause() : audio.play()
+        togglePlayBtn.onclick = async () => {
+            try {
+                this.isPlaying ? audio.pause() : await audio.play()
+            } catch (error) {}
         }
 
         audio.onplay = () => {
@@ -160,22 +162,26 @@ const playerController = {
             document.querySelector('.current-time').innerText = getCurrentTime(audio)
         }
 
-        nextSongBtn.onclick = () => {
+        nextSongBtn.onclick = async () => {
             if (this.isRandom) {
                 this.randomSong()
             }
             this.nextSong()
 
-            audio.play()
+            try {
+                await audio.play()
+            } catch (error) {}
             sendEvent({ eventName: 'song:next-song', detail: this.currentIndex })
         }
 
-        prevSongBtn.onclick = () => {
+        prevSongBtn.onclick = async () => {
             if (this.isRandom) {
                 this.randomSong()
             }
             this.prevSong()
-            audio.play()
+            try {
+                await audio.play()
+            } catch (error) {}
             sendEvent({ eventName: 'song:prev-song', detail: this.currentIndex })
         }
 
@@ -204,12 +210,16 @@ const playerController = {
             localStorage.setItem('isRepeat', this.isRepeat)
         }
 
-        audio.onended = () => {
+        audio.onended = async () => {
             if (this.isRepeat) {
-                audio.play()
+                try {
+                    await audio.play()
+                } catch (error) {}
             } else if (this.isRandom) {
                 this.randomSong()
-                audio.play()
+                try {
+                    await audio.play()
+                } catch (error) {}
             } else {
                 nextSongBtn.click()
             }
@@ -219,28 +229,32 @@ const playerController = {
 
         listenEvent({
             eventName: 'song:choose-song',
-            handler: (e) => {
+            handler: async (e) => {
                 this.currentIndex = e.detail
                 this.loadCurrentSong()
 
                 audio.currentTime = 0
 
-                audio.play()
+                try {
+                    await audio.play()
+                } catch (error) {}
             },
         })
 
         listenEvent({
             eventName: 'song:play',
-            handler: (e) => {
+            handler: async (e) => {
                 this.isPlaying = e.detail
 
-                this.isPlaying ? audio.play() : audio.pause()
+                try {
+                    this.isPlaying ? audio.play() : audio.pause()
+                } catch (error) {}
             },
         })
 
         listenEvent({
             eventName: 'music:add',
-            handler: ({ detail }) => {
+            handler: async ({ detail }) => {
                 const data = JSON.parse(detail)
                 this.songs.unshift(data.data)
                 this.loadCurrentSong()
@@ -251,7 +265,9 @@ const playerController = {
 
                 audio.currentTime = currentTime
 
-                audio.play()
+                try {
+                    await audio.play()
+                } catch (error) {}
             },
         })
 
@@ -265,7 +281,7 @@ const playerController = {
 
         listenEvent({
             eventName: 'music:update',
-            handler: ({ detail }) => {
+            handler: async ({ detail }) => {
                 const data = JSON.parse(detail)
                 const songIndex = this.songs.findIndex((song) => song.id === Number(data.data.id))
                 this.songs[songIndex] = data.data
@@ -279,18 +295,22 @@ const playerController = {
                 audio.currentTime = currentTime
 
                 if (audioIsPlaying) {
-                    audio.play()
+                    try {
+                        await audio.play()
+                    } catch (error) {}
                 }
             },
         })
 
         listenEvent({
             eventName: 'favorite:choose-song',
-            handler: (e) => {
+            handler: async (e) => {
                 const songIndex = this.songs.findIndex((song) => song.id === Number(e.detail))
                 this.currentIndex = songIndex
                 this.loadCurrentSong()
-                audio.play()
+                try {
+                    await audio.play()
+                } catch (error) {}
             },
         })
     },
