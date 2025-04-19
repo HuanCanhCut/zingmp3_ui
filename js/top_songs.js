@@ -9,12 +9,29 @@ const topSongs = {
 
     async getSongs() {
         try {
-            const res = await fetch('https://zing-api.huancanhcut.click/api/music/top', {
+            let res = await fetch('https://zing-api.huancanhcut.click/api/music/top', {
                 headers: {
                     Authorization: 'Bearer ' + localStorage.getItem('token'),
                     'Content-Type': 'application/json',
                 },
             })
+
+            if (!res.ok) {
+                localStorage.removeItem('token')
+
+                if (res.status === 401) {
+                    res = await fetch('https://zing-api.huancanhcut.click/api/music')
+
+                    if (!res.ok) {
+                        toast({
+                            title: 'Lỗi',
+                            message: 'Có lỗi xảy ra khi lấy danh sách bài hát',
+                            type: 'error',
+                        })
+                    }
+                }
+            }
+
             const data = await res.json()
 
             sendEvent({
