@@ -170,6 +170,44 @@ const mySong = {
                 this.init()
             },
         })
+
+        listenEvent({
+            eventName: 'song:next-song',
+            handler: (e) => {
+                this.currentIndex = e.detail
+                this.loadCurrentSong()
+                this.songActiveIntoView()
+            },
+        })
+
+        listenEvent({
+            eventName: 'song:prev-song',
+            handler: (e) => {
+                this.currentIndex = e.detail
+                this.loadCurrentSong()
+                this.songActiveIntoView()
+            },
+        })
+
+        listenEvent({
+            eventName: 'favorite:choose-song',
+            handler: (e) => {
+                const songIndex = this.songs.findIndex((song) => song.id === Number(e.detail))
+                this.currentIndex = songIndex
+                this.loadCurrentSong()
+            },
+        })
+    },
+
+    songActiveIntoView() {
+        setTimeout(() => {
+            const songActive = document.querySelector('.content_playlist-item.active')
+            const songIndex = songActive.getAttribute('data-index')
+            songActive.scrollIntoView({
+                behavior: 'smooth',
+                block: songIndex < 1 ? 'center' : 'nearest',
+            })
+        }, 200)
     },
 
     async handleDeleteSong(songIndex) {

@@ -127,6 +127,9 @@ const app = {
         overlay.addEventListener('click', () => {
             this.closeModal()
 
+            // hide playlist sidebar
+            $('#playlist-sidebar').classList.remove('active')
+
             this.favoriteSongs = this.favoriteSongs.filter((favorite) => favorite.is_favorite)
 
             this.loadPlaylistSidebar()
@@ -164,11 +167,11 @@ const app = {
         })
 
         $('.nav--next').onclick = () => {
-            window.history.back()
+            window.history.forward()
         }
 
         $('.nav--prev').onclick = () => {
-            window.history.forward()
+            window.history.back()
         }
 
         themeModalBtn.onclick = () => {
