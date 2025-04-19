@@ -30,7 +30,7 @@ const playerController = {
 
     async getSongs() {
         const token = localStorage.getItem('token')
-        const res = await fetch('https://zing-api.huancanhcut.click/api/music', {
+        let res = await fetch('https://zing-api.huancanhcut.click/api/music', {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -38,7 +38,18 @@ const playerController = {
 
         if (!res.ok) {
             localStorage.removeItem('token')
-            return
+
+            if (res.status === 401) {
+                res = await fetch('https://zing-api.huancanhcut.click/api/music')
+
+                if (!res.ok) {
+                    toast({
+                        title: 'Lỗi',
+                        message: 'Có lỗi xảy ra khi lấy danh sách bài hát',
+                        type: 'error',
+                    })
+                }
+            }
         }
 
         const data = await res.json()
