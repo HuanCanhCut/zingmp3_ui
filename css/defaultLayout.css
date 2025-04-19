@@ -825,6 +825,10 @@
     .music_player-info {
         width: 50px;
     }
+
+    .header__search-wrapper-input-result {
+        width: 97vw;
+    }
 }
 
 @media screen and (max-width: 480px) {
