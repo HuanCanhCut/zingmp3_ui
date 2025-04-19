@@ -78,6 +78,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    border-bottom: 1px solid var(--border-gray-color);
+}
+
+.sidebar__logo a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .sidebar__logo-img {
@@ -366,17 +373,16 @@
 .header__actions_auth {
     display: flex;
     align-items: center;
-    gap: 16px;
 }
 
 .header__actions-login-btn,
 .header__actions-register-btn {
     font-size: 1.4rem;
     color: var(--text-primary);
+    padding: 9px 20px;
 }
 
 .header__actions-login-btn {
-    padding: 9px 20px;
     border-radius: 100px;
     background: var(--linear-gradient-primary);
     color: #fff;
