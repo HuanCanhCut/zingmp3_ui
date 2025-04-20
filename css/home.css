@@ -89,8 +89,6 @@
 }
 
 .home__content_playlist {
-    height: 400px;
-    overflow-y: overlay;
     margin-left: 20px;
     padding: 16px;
     margin-top: 16px;
@@ -220,6 +218,5 @@
     .home__content_playlist {
         margin-left: 0;
         padding: 0;
-        height: 300px;
     }
 }
