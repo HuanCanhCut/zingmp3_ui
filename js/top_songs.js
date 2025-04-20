@@ -1,9 +1,13 @@
 import { listenEvent, sendEvent } from './helpers/event.js'
 
-const content = document.querySelector('#content')
+const topSong = document.querySelector('.content__top-song')
+const toggleMoreBtn = document.querySelector('.content__top-song-toggle')
+
+const COUNT_SONGS = 5
 
 const topSongs = {
     songs: [],
+    count: COUNT_SONGS,
 
     currentIndex: 0,
 
@@ -51,8 +55,10 @@ const topSongs = {
         })
     },
 
-    renderSongs() {
-        return this.songs.map((song, index) => {
+    renderSongs(count = this.songs.length) {
+        count < this.songs.length ? (toggleMoreBtn.textContent = 'Xem thêm') : (toggleMoreBtn.textContent = 'Thu gọn')
+
+        return this.songs.slice(0, count).map((song, index) => {
             return `
                 <div
                     class="content_playlist-item ${Number(this.currentIndex) === index ? 'active' : ''}"
@@ -89,11 +95,11 @@ const topSongs = {
     },
 
     loadCurrentSong() {
-        content.innerHTML = this.renderSongs().join('')
+        topSong.innerHTML = this.renderSongs(this.count).join('')
     },
 
     handleEvent() {
-        content.onclick = (e) => {
+        topSong.onclick = (e) => {
             if (!e.target.closest('.playlist__item-heart')) {
                 const songIndex = e.target.closest('.content_playlist-item:not(.active)')?.getAttribute('data-index')
 
@@ -114,10 +120,22 @@ const topSongs = {
             }
         }
 
+        toggleMoreBtn.onclick = () => {
+            this.count = this.count === this.songs.length ? COUNT_SONGS : this.songs.length
+            this.loadCurrentSong()
+        }
+
         listenEvent({
             eventName: 'song:next-song',
             handler: (e) => {
                 this.currentIndex = e.detail
+                if (this.count <= this.currentIndex) {
+                    console.log({
+                        count: this.count,
+                        currentIndex: this.currentIndex,
+                    })
+                    toggleMoreBtn.click()
+                }
                 this.loadCurrentSong()
                 this.songActiveIntoView()
             },
@@ -163,7 +181,6 @@ const topSongs = {
     songActiveIntoView() {
         setTimeout(() => {
             const songActive = document.querySelector('.content_playlist-item.active')
-
             songActive.scrollIntoView({
                 behavior: 'smooth',
                 block: 'center',

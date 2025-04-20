@@ -254,10 +254,9 @@ const SongApp = {
     songActiveIntoView() {
         setTimeout(() => {
             const songActive = document.querySelector('.song-item.active')
-            const songIndex = songActive.getAttribute('data-index')
             songActive.scrollIntoView({
                 behavior: 'smooth',
-                block: songIndex < 1 ? 'center' : 'nearest',
+                block: 'center',
             })
         }, 200)
     },

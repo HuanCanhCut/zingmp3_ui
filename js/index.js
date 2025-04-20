@@ -82,6 +82,10 @@ const homeApp = {
         return html
     },
 
+    loadCurrentSong() {
+        playlist.innerHTML = this.renderPlaylist().join('')
+    },
+
     renderSlider() {
         const imagesPath = this.songs.map((song) => song.thumbnail)
         const classMapping = {
@@ -108,10 +112,6 @@ const homeApp = {
                 return this.songs[this.currentIndex]
             },
         })
-    },
-
-    loadCurrentSong() {
-        playlist.innerHTML = this.renderPlaylist().join('')
     },
 
     handleEvent() {
@@ -307,10 +307,9 @@ const homeApp = {
     songActiveIntoView() {
         setTimeout(() => {
             const songActive = document.querySelector('.home__content_playlist-item.active')
-            const songIndex = songActive.getAttribute('data-index')
             songActive.scrollIntoView({
                 behavior: 'smooth',
-                block: songIndex < 1 ? 'center' : 'nearest',
+                block: 'center',
             })
         }, 200)
     },

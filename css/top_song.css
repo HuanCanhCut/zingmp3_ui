@@ -1,5 +1,22 @@
 #content {
     padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.content__top-song {
+    width: 100%;
+}
+
+.content__top-song-toggle {
+    padding: 6px 20px;
+    border-radius: 50px;
+    border: 1px solid var(--gray-opacity-50);
+    cursor: pointer;
+    color: var(--gray-opacity-50);
+    margin: 0 auto;
+    margin-top: 20px;
 }
 
 .content_playlist-item-level {
