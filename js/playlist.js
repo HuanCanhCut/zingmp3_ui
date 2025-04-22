@@ -74,6 +74,10 @@ const playerController = {
     loadCurrentSong() {
         const currentSong = this.currentSong
 
+        if (!currentSong) {
+            return
+        }
+
         audio.src = currentSong.url
 
         playerCdThumb.src = currentSong.thumbnail
