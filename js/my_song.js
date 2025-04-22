@@ -40,12 +40,24 @@ const mySong = {
     defineProperties: function () {
         Object.defineProperty(this, 'currentSong', {
             get: function () {
-                return this.songs[this.currentIndex]
+                return this.songs[this.currentIndex] || null
             },
         })
     },
 
     renderMySongs() {
+        if (this.songs.length === 0) {
+            return `
+                <div class="content_playlist-empty">
+                    <h1 class="content_playlist-empty-text">Bạn chưa có bài hát nào</h1>
+                    <button class="content_playlist-empty-btn">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                        Tải lên
+                    </button>
+                </div>
+            `
+        }
+
         const html = this.songs.map((song, index) => {
             return `
                     <div
@@ -83,11 +95,18 @@ const mySong = {
     loadCurrentSong() {
         const html = this.renderMySongs()
 
-        content.innerHTML = html.join('')
+        content.innerHTML = Array.isArray(html) ? html.join('') : html
     },
 
     handleEvent() {
         content.onclick = (e) => {
+            // if click upload btn
+            if (e.target.closest('.content_playlist-empty-btn')) {
+                modal.src = 'modal/upload_music_modal.html'
+                modal.classList.add('active')
+                overlay.classList.add('active')
+            }
+
             // if click delete btn
             if (e.target.closest('.playlist__item-delete')) {
                 const songIndex = Number(e.target.closest('.content_playlist-item').getAttribute('data-index'))
@@ -149,6 +168,13 @@ const mySong = {
             deleteConfirmModal.classList.remove('active')
             overlay.classList.remove('active')
         }
+
+        listenEvent({
+            eventName: 'music:add',
+            handler: () => {
+                this.loadCurrentSong()
+            },
+        })
 
         listenEvent({
             eventName: 'music:update',
