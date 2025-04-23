@@ -12,6 +12,8 @@ const nextSongBtn = document.querySelector('.btn-next')
 const prevSongBtn = document.querySelector('.btn-prev')
 const randomSongBtn = document.querySelector('.btn-random')
 const repeatSongBtn = document.querySelector('.btn-repeat')
+const volumeControl = document.querySelector('#volume-control')
+const volumeBtn = document.querySelector('.music__player-volume-btn')
 
 const cdThumbAnimate = playerCdThumb.animate([{ transform: 'rotate(360deg)' }], {
     duration: 12000,
@@ -27,6 +29,8 @@ const playerController = {
     playerIndexes: [],
     isRandom: localStorage.getItem('isRandom') === 'true' || false,
     isRepeat: localStorage.getItem('isRepeat') === 'true' || false,
+    currentVolume: localStorage.getItem('volume') ? parseFloat(localStorage.getItem('volume')) : 1,
+    isMuted: localStorage.getItem('isMuted') === 'true' || false,
 
     async getSongs() {
         const token = localStorage.getItem('token')
@@ -89,6 +93,26 @@ const playerController = {
     loadConfig() {
         randomSongBtn.classList.toggle('active', this.isRandom)
         repeatSongBtn.classList.toggle('active', this.isRepeat)
+
+        // Cấu hình âm lượng
+        audio.volume = this.currentVolume
+        volumeControl.value = this.currentVolume * 100
+        this.updateVolumeIcon()
+    },
+
+    updateVolumeIcon() {
+        const volumeIcon = volumeBtn.querySelector('i')
+        volumeIcon.className = ''
+
+        if (this.isMuted || this.currentVolume === 0) {
+            volumeIcon.className = 'fa-solid fa-volume-xmark'
+        } else if (this.currentVolume < 0.3) {
+            volumeIcon.className = 'fa-solid fa-volume-off'
+        } else if (this.currentVolume < 0.7) {
+            volumeIcon.className = 'fa-solid fa-volume-low'
+        } else {
+            volumeIcon.className = 'fa-solid fa-volume-high'
+        }
     },
 
     handleEvent() {
@@ -142,6 +166,39 @@ const playerController = {
             cdThumbAnimate.pause()
 
             sendEvent({ eventName: 'song:is-playing', detail: false })
+        }
+
+        // Xử lý sự kiện thay đổi âm lượng
+        volumeControl.oninput = () => {
+            const volumeValue = volumeControl.value / 100
+            audio.volume = volumeValue
+            this.currentVolume = volumeValue
+            this.isMuted = volumeValue === 0
+
+            localStorage.setItem('volume', volumeValue)
+            localStorage.setItem('isMuted', this.isMuted)
+
+            this.updateVolumeIcon()
+        }
+
+        // Xử lý sự kiện click vào nút âm lượng để tắt/bật tiếng
+        volumeBtn.onclick = () => {
+            this.isMuted = !this.isMuted
+
+            if (this.isMuted) {
+                audio.volume = 0
+                volumeControl.value = 0
+            } else {
+                // Nếu âm lượng đã được điều chỉnh, thì sử dụng âm lượng đã điều chỉnh
+                // Nếu âm lượng chưa được điều chỉnh, thì sử dụng âm lượng mặc định là 1
+                const savedVolume = this.currentVolume > 0 ? this.currentVolume : 1
+                audio.volume = savedVolume
+                volumeControl.value = savedVolume * 100
+                this.currentVolume = savedVolume
+            }
+
+            localStorage.setItem('isMuted', this.isMuted)
+            this.updateVolumeIcon()
         }
 
         progress.oninput = () => {
