@@ -189,8 +189,6 @@ const playerController = {
                 audio.volume = 0
                 volumeControl.value = 0
             } else {
-                // Nếu âm lượng đã được điều chỉnh, thì sử dụng âm lượng đã điều chỉnh
-                // Nếu âm lượng chưa được điều chỉnh, thì sử dụng âm lượng mặc định là 1
                 const savedVolume = this.currentVolume > 0 ? this.currentVolume : 1
                 audio.volume = savedVolume
                 volumeControl.value = savedVolume * 100

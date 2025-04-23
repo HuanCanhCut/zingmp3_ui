@@ -810,7 +810,7 @@
     height: 6px;
     cursor: pointer;
     outline: none;
-    accent-color: yellow;
+    accent-color: rgb(255, 99, 125);
     background: transparent;
     border-radius: 10px;
     transform: rotate(-90deg);
