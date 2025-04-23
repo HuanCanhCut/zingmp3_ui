@@ -242,6 +242,32 @@ const playerController = {
             sendEvent({ eventName: 'song:next-song', detail: this.currentIndex })
         }
 
+        window.addEventListener('keydown', (e) => {
+            if (e.shiftKey) {
+                switch (e.key) {
+                    case 'ArrowRight':
+                        nextSongBtn.click()
+                        break
+                    case 'ArrowLeft':
+                        prevSongBtn.click()
+                        break
+                }
+            } else {
+                switch (e.key) {
+                    case 'ArrowRight':
+                        audio.currentTime += 10
+                        break
+                    case 'ArrowLeft':
+                        audio.currentTime -= 10
+                        break
+                    case ' ':
+                        e.preventDefault()
+                        togglePlayBtn.click()
+                        break
+                }
+            }
+        })
+
         listenEvent({
             eventName: 'song:choose-song',
             handler: async (e) => {

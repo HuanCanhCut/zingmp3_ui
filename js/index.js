@@ -6,6 +6,16 @@ const uploadBtn = document.querySelector('.home__content_playlist_upload-btn')
 const modal = document.querySelector('#modal')
 const overlay = document.querySelector('#overlay')
 
+const cdThumb = document.querySelector('.song_info-thumb')
+const songTitle = document.querySelector('.song-title')
+
+const cdThumbAnimate = cdThumb.animate([{ transform: 'rotate(360deg)' }], {
+    duration: 12000,
+    iterations: Infinity,
+})
+
+cdThumbAnimate.pause()
+
 const homeApp = {
     songs: [],
     currentIndex: 0, // index of the current song
@@ -84,6 +94,9 @@ const homeApp = {
 
     loadCurrentSong() {
         playlist.innerHTML = this.renderPlaylist().join('')
+
+        cdThumb.src = this.currentSong.thumbnail
+        songTitle.textContent = this.currentSong.name
     },
 
     renderSlider() {
@@ -155,6 +168,17 @@ const homeApp = {
         }
 
         listenEvent({
+            eventName: 'song:is-playing',
+            handler: (e) => {
+                if (e.detail) {
+                    cdThumbAnimate.play()
+                } else {
+                    cdThumbAnimate.pause()
+                }
+            },
+        })
+
+        listenEvent({
             eventName: 'song:next-song',
             handler: (e) => {
                 this.currentIndex = e.detail
@@ -206,26 +230,6 @@ const homeApp = {
 
                 this.songs.unshift(data.data)
                 this.loadCurrentSong()
-            },
-        })
-
-        listenEvent({
-            eventName: 'music:update',
-            handler: async ({ detail }) => {
-                const data = JSON.parse(detail)
-
-                const songIndex = this.songs.findIndex((song) => song.id === Number(data.data.id))
-                this.songs[songIndex] = data.data
-
-                const audioIsPlaying = !audio.paused
-
-                this.loadCurrentSong()
-
-                if (audioIsPlaying) {
-                    try {
-                        await audio.play()
-                    } catch (error) {}
-                }
             },
         })
     },

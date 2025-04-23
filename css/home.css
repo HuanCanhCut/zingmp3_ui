@@ -1,4 +1,4 @@
-.user_info {
+.song_info {
     width: 100%;
     display: flex;
     align-items: center;
@@ -7,18 +7,20 @@
     margin-top: 20px;
 }
 
-.user_info-avatar {
-    width: 160px;
-    height: 160px;
+.song_info-thumb {
+    width: 180px;
+    aspect-ratio: 1 / 1;
     border-radius: 50%;
     object-fit: cover;
 }
 
-.user_info-name {
+.song-title {
     font-size: 24px;
     font-weight: 600;
     color: var(--text-primary);
     margin-top: 16px;
+    text-align: center;
+    line-height: 1.2;
 }
 
 .home__content_slider {
