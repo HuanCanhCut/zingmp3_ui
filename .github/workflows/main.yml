@@ -16,7 +16,7 @@ jobs:
                   port: 22
                   key: ${{ secrets.SSH_PRIVATE_KEY }}
                   script: |
-                      cd /var/www/zingmp3/html/
+                      cd /var/www/html/zingmp3_ui
                       git fetch origin
                       git checkout main
                       git pull
