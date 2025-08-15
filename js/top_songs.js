@@ -13,7 +13,7 @@ const topSongs = {
 
     async getSongs() {
         try {
-            let res = await fetch('https://zing-api.huancanhcut.click/api/music/top', {
+            let res = await fetch('https://api.zingmp3.local/api/music/top', {
                 headers: {
                     Authorization: 'Bearer ' + localStorage.getItem('token'),
                     'Content-Type': 'application/json',
@@ -24,7 +24,7 @@ const topSongs = {
                 localStorage.removeItem('token')
 
                 if (res.status === 401) {
-                    res = await fetch('https://zing-api.huancanhcut.click/api/music')
+                    res = await fetch('https://api.zingmp3.local/api/music')
 
                     if (!res.ok) {
                         toast({
@@ -206,7 +206,7 @@ const topSongs = {
         // add favorite
         if (!isFavorite) {
             try {
-                const res = await fetch(`https://zing-api.huancanhcut.click/api/favorite`, {
+                const res = await fetch(`https://api.zingmp3.local/api/favorite`, {
                     method: 'POST',
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -236,7 +236,7 @@ const topSongs = {
         } else {
             try {
                 // remove favorite
-                const res = await fetch(`https://zing-api.huancanhcut.click/api/favorite/${this.songs[songIndex].id}`, {
+                const res = await fetch(`https://api.zingmp3.local/api/favorite/${this.songs[songIndex].id}`, {
                     method: 'DELETE',
                     headers: {
                         Authorization: `Bearer ${token}`,

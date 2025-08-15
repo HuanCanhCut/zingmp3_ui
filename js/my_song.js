@@ -14,7 +14,7 @@ const mySong = {
     async getMySongs() {
         try {
             const token = localStorage.getItem('token')
-            const res = await fetch('https://zing-api.huancanhcut.click/api/music/my-songs', {
+            const res = await fetch('https://api.zingmp3.local/api/music/my-songs', {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -241,7 +241,7 @@ const mySong = {
         try {
             const musicId = this.songs[songIndex].id
 
-            const res = await fetch(`https://zing-api.huancanhcut.click/api/music/${musicId}`, {
+            const res = await fetch(`https://api.zingmp3.local/api/music/${musicId}`, {
                 method: 'DELETE',
                 headers: {
                     Authorization: `Bearer ${token}`,

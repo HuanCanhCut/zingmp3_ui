@@ -18,7 +18,7 @@ const SongApp = {
     isPlaying: false,
     async getSongs() {
         const token = localStorage.getItem('token')
-        let res = await fetch('https://zing-api.huancanhcut.click/api/music', {
+        let res = await fetch('https://api.zingmp3.local/api/music', {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -28,7 +28,7 @@ const SongApp = {
             localStorage.removeItem('token')
 
             if (res.status === 401) {
-                res = await fetch('https://zing-api.huancanhcut.click/api/music')
+                res = await fetch('https://api.zingmp3.local/api/music')
 
                 if (!res.ok) {
                     toast({
@@ -124,7 +124,7 @@ const SongApp = {
                 // add favorite
                 if (!isFavorite) {
                     try {
-                        const res = await fetch(`https://zing-api.huancanhcut.click/api/favorite`, {
+                        const res = await fetch(`https://api.zingmp3.local/api/favorite`, {
                             method: 'POST',
                             headers: {
                                 Authorization: `Bearer ${token}`,
@@ -154,15 +154,12 @@ const SongApp = {
                 } else {
                     // remove favorite
                     try {
-                        const res = await fetch(
-                            `https://zing-api.huancanhcut.click/api/favorite/${this.songs[songIndex].id}`,
-                            {
-                                method: 'DELETE',
-                                headers: {
-                                    Authorization: `Bearer ${token}`,
-                                },
-                            }
-                        )
+                        const res = await fetch(`https://api.zingmp3.local/api/favorite/${this.songs[songIndex].id}`, {
+                            method: 'DELETE',
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                            },
+                        })
 
                         if (!res.ok) {
                             const errorData = await res.json()

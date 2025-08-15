@@ -17,7 +17,6 @@ jobs:
                   key: ${{ secrets.SSH_PRIVATE_KEY }}
                   script: |
                       cd /var/www/html/zingmp3_ui
-                      git fetch origin
-                      git checkout main
+                      git checkout production
                       git pull
                       curl -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CF_ZONE_ID }}/purge_cache" -H "Authorization: Bearer ${{ secrets.CF_API_TOKEN }}" -H "Content-Type: application/json" --data '{"purge_everything":true}'
