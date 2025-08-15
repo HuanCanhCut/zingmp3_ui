@@ -2,7 +2,7 @@ name: ZingMP3 UI Deployment
 
 on:
     push:
-        branches: [main]
+        branches: [production]
 
 jobs:
     deploy:
