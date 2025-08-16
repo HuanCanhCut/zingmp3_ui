@@ -1,4 +1,6 @@
 import { sendEvent, listenEvent } from './helpers/event.js'
+import * as axiosClient from '../config/axiosClient.js'
+import getCurrentUser from './getCurrentUser.js'
 
 const content = document.querySelector('#content')
 const overlay = document.querySelector('#overlay')
@@ -10,24 +12,18 @@ const deleteConfirmBtnCancel = deleteConfirmModal.querySelector('.delete-confirm
 const mySong = {
     songs: [],
     currentIndex: 0,
+    currentUser: null,
 
     async getMySongs() {
         try {
-            const token = localStorage.getItem('token')
-            const res = await fetch('https://api.zingmp3.local/api/music/my-songs', {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            })
-
-            const data = await res.json()
+            const res = await axiosClient.get('/music/my-songs')
 
             sendEvent({
                 eventName: 'music:new-songs',
-                detail: data,
+                detail: res.data,
             })
 
-            this.songs = data.songs
+            this.songs = res.data.songs
         } catch (error) {
             toast({
                 title: 'Lỗi',
@@ -188,16 +184,6 @@ const mySong = {
         })
 
         listenEvent({
-            eventName: 'logout',
-            handler: () => {
-                this.songs = []
-                this.loadCurrentSong()
-                this.currentIndex = 0
-                this.init()
-            },
-        })
-
-        listenEvent({
             eventName: 'song:next-song',
             handler: (e) => {
                 this.currentIndex = e.detail
@@ -236,24 +222,11 @@ const mySong = {
     },
 
     async handleDeleteSong(songIndex) {
-        const token = localStorage.getItem('token')
-
         try {
             const musicId = this.songs[songIndex].id
 
-            const res = await fetch(`https://api.zingmp3.local/api/music/${musicId}`, {
-                method: 'DELETE',
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            })
+            await axiosClient.del(`/music/${musicId}`)
 
-            if (!res.ok) {
-                const errorData = await res.json()
-                throw new Error(errorData.message || `HTTP error! Status: ${res.status}`)
-            }
-
-            // if successfully
             toast({
                 title: 'Thành công',
                 message: 'Xóa bài hát thành công',
@@ -272,9 +245,9 @@ const mySong = {
     },
 
     async init() {
-        const token = localStorage.getItem('token')
+        this.currentUser = await getCurrentUser()
 
-        if (!token) {
+        if (!this.currentUser) {
             modal.src = 'modal/login_modal.html'
             modal.classList.add('active')
             overlay.classList.add('active')
@@ -282,10 +255,7 @@ const mySong = {
             window.addEventListener('message', async (e) => {
                 switch (e.data.type) {
                     case 'modal:auth-success':
-                        await this.getMySongs()
-                        this.defineProperties()
-                        this.loadCurrentSong()
-                        this.handleEvent()
+                        window.location.reload()
                         break
                 }
             })

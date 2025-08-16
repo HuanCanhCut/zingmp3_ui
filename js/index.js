@@ -1,4 +1,6 @@
 import { listenEvent, sendEvent } from './helpers/event.js'
+import * as axiosClient from '../config/axiosClient.js'
+import getCurrentUser from './getCurrentUser.js'
 
 const playlist = document.querySelector('.home__content_playlist')
 const slider = document.querySelector('.home__content_slider')
@@ -17,36 +19,14 @@ const cdThumbAnimate = cdThumb.animate([{ transform: 'rotate(360deg)' }], {
 cdThumbAnimate.pause()
 
 const homeApp = {
+    currentUser: null,
     songs: [],
     currentIndex: 0, // index of the current song
 
     async getSongs() {
-        const token = localStorage.getItem('token')
-        let res = await fetch('https://api.zingmp3.local/api/music', {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        })
+        const res = await axiosClient.get('/music')
 
-        if (!res.ok) {
-            localStorage.removeItem('token')
-
-            if (res.status === 401) {
-                res = await fetch('https://api.zingmp3.local/api/music')
-
-                if (!res.ok) {
-                    toast({
-                        title: 'Lỗi',
-                        message: 'Có lỗi xảy ra khi lấy danh sách bài hát',
-                        type: 'error',
-                    })
-                }
-            }
-        }
-
-        const data = await res.json()
-
-        this.songs = data.musics
+        this.songs = res.data.musics
     },
 
     renderPlaylist() {
@@ -151,9 +131,7 @@ const homeApp = {
         }
 
         uploadBtn.onclick = () => {
-            const token = localStorage.getItem('token')
-
-            if (!token) {
+            if (!this.currentUser) {
                 // open login form
                 sendEvent({
                     eventName: 'modal:open-auth-modal',
@@ -237,10 +215,7 @@ const homeApp = {
     async handleFavoriteSong(songIndex) {
         const isFavorite = this.songs[songIndex].is_favorite
 
-        // fetch api update favorite
-        const token = localStorage.getItem('token')
-
-        if (!token) {
+        if (!this.currentUser) {
             sendEvent({
                 eventName: 'modal:open-auth-modal',
             })
@@ -252,21 +227,9 @@ const homeApp = {
         // add favorite
         if (!isFavorite) {
             try {
-                const res = await fetch(`https://api.zingmp3.local/api/favorite`, {
-                    method: 'POST',
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        song_id: this.songs[songIndex].id,
-                    }),
+                await axiosClient.post('/favorite', {
+                    song_id: this.songs[songIndex].id,
                 })
-
-                if (!res.ok) {
-                    const errorData = await res.json()
-                    throw new Error(errorData.message || `HTTP error! Status: ${res.status}`)
-                }
 
                 sendEvent({
                     eventName: 'favorite:add',
@@ -281,18 +244,7 @@ const homeApp = {
             }
         } else {
             try {
-                // remove favorite
-                const res = await fetch(`https://api.zingmp3.local/api/favorite/${this.songs[songIndex].id}`, {
-                    method: 'DELETE',
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                })
-
-                if (!res.ok) {
-                    const errorData = await res.json()
-                    throw new Error(errorData.message || `HTTP error! Status: ${res.status}`)
-                }
+                await axiosClient.del(`/favorite/${this.songs[songIndex].id}`)
 
                 sendEvent({
                     eventName: 'favorite:remove',
@@ -339,6 +291,7 @@ const homeApp = {
     },
 
     async init() {
+        this.currentUser = await getCurrentUser()
         await this.getSongs()
         this.renderPlaylist()
         this.renderSlider()

@@ -1,4 +1,6 @@
 import { listenEvent, sendEvent } from './helpers/event.js'
+import * as axiosClient from '../config/axiosClient.js'
+import getCurrentUser from './getCurrentUser.js'
 
 const $ = document.querySelector.bind(document)
 const $$ = document.querySelectorAll.bind(document)
@@ -18,11 +20,10 @@ const overlay = $('#overlay')
 const app = {
     favoriteSongs: [],
     currentIndex: 0,
+    currentUser: null,
 
     loadHeaderActionUI() {
-        const token = localStorage.getItem('token')
-
-        if (token) {
+        if (this.currentUser) {
             headerActionsAuth.classList.remove('active')
             headerActionsUser.classList.add('active')
         } else {
@@ -39,13 +40,16 @@ const app = {
                     modal.setAttribute('src', `./modal/${e.data.data}.html`)
                     break
                 case 'modal:auth-success':
+                    this.currentUser = e.data.data.currentUser
+
                     this.closeModal()
                     toast({
                         title: 'Thành công',
                         message: e.data.data.message,
                         type: 'success',
                     })
-                    this.loadHeaderActionUI()
+
+                    window.location.reload()
                     break
                 case 'theme:apply':
                     const themeData = e.data.data
@@ -110,6 +114,10 @@ const app = {
             }
 
             if (!e.target.closest(`.header__search-wrapper`)) {
+                if (e.target.closest(`.header__search-wrapper-input-result`)) {
+                    return
+                }
+
                 $('.header__search-wrapper-input-result').classList.remove('active')
             }
         })
@@ -150,15 +158,12 @@ const app = {
         }
 
         Array.from(userAvatarPopperBtns).forEach((btn) => {
-            btn.onclick = () => {
+            btn.onclick = async () => {
                 switch (btn.dataset.type) {
                     case 'logout':
-                        localStorage.removeItem('token')
-                        this.loadHeaderActionUI()
-                        sendEvent({
-                            eventName: 'logout',
-                            detail: true,
-                        })
+                        await axiosClient.post('/auth/logout')
+
+                        window.location.reload()
                         break
                     case 'my-songs':
                         break
@@ -221,9 +226,7 @@ const app = {
                 this.favoriteSongs[songIndex].is_favorite = !isFavorite
 
                 // fetch api update favorite
-                const token = localStorage.getItem('token')
-
-                if (!token) {
+                if (!this.currentUser) {
                     sendEvent({
                         eventName: 'modal:open-auth-modal',
                     })
@@ -233,15 +236,8 @@ const app = {
                 // add favorite
                 if (!isFavorite) {
                     try {
-                        const res = await fetch(`https://api.zingmp3.local/api/favorite`, {
-                            method: 'POST',
-                            headers: {
-                                Authorization: `Bearer ${token}`,
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                song_id: this.favoriteSongs[songIndex].song.id,
-                            }),
+                        const res = await axiosClient.post('/favorite', {
+                            song_id: this.favoriteSongs[songIndex].song.id,
                         })
 
                         if (!res.ok) {
@@ -263,20 +259,7 @@ const app = {
                 } else {
                     // remove favorite
                     try {
-                        const res = await fetch(
-                            `https://api.zingmp3.local/api/favorite/${this.favoriteSongs[songIndex].song.id}`,
-                            {
-                                method: 'DELETE',
-                                headers: {
-                                    Authorization: `Bearer ${token}`,
-                                },
-                            }
-                        )
-
-                        if (!res.ok) {
-                            const errorData = await res.json()
-                            throw new Error(errorData.message || `HTTP error! Status: ${res.status}`)
-                        }
+                        await axiosClient.del(`/favorite/${this.favoriteSongs[songIndex].song.id}`)
 
                         sendEvent({
                             eventName: 'favorite:remove',
@@ -285,7 +268,7 @@ const app = {
                     } catch (error) {
                         toast({
                             title: 'Thất bại',
-                            message: error.message,
+                            message: error.response.data.message,
                             type: 'error',
                         })
                     }
@@ -338,8 +321,8 @@ const app = {
                     return async (searchValue) => {
                         clearTimeout(timeoutId)
                         timeoutId = setTimeout(async () => {
-                            const res = await fetch(`https://api.zingmp3.local/api/music/search?query=${searchValue}`)
-                            const data = await res.json()
+                            const res = await axiosClient.get(`/music/search?query=${searchValue}`)
+                            const data = res.data
 
                             if (Array.isArray(data.musics)) {
                                 $('.header__search-wrapper-input-result-list').innerHTML = data.musics
@@ -452,26 +435,13 @@ const app = {
     },
 
     async getFavoriteSongs() {
-        const token = localStorage.getItem('token')
-
-        if (!token) {
+        if (!this.currentUser) {
             return
         }
 
-        const res = await fetch('https://api.zingmp3.local/api/favorite', {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        })
+        const res = await axiosClient.get('/favorite')
 
-        if (!res.ok) {
-            localStorage.removeItem('token')
-            return
-        }
-
-        const data = await res.json()
-
-        this.favoriteSongs = data.data.map((favorite) => {
+        this.favoriteSongs = res.data.data.map((favorite) => {
             return {
                 ...favorite,
                 is_favorite: true,
@@ -512,27 +482,9 @@ const app = {
             .join('')
     },
 
-    async getCurrentUser() {
-        const token = localStorage.getItem('token')
-
-        if (!token) {
-            return
-        }
-
-        const res = await fetch('https://api.zingmp3.local/api/me', {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        })
-
-        if (!res.ok) {
-            localStorage.removeItem('token')
-        }
-    },
-
     async init() {
+        this.currentUser = await getCurrentUser()
         this.loadCurrentTheme()
-        await this.getCurrentUser()
         this.loadHeaderActionUI()
         this.handleEvent()
         await this.getFavoriteSongs()

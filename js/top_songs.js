@@ -1,4 +1,6 @@
 import { listenEvent, sendEvent } from './helpers/event.js'
+import getCurrentUser from './getCurrentUser.js'
+import * as axiosClient from '../config/axiosClient.js'
 
 const topSong = document.querySelector('.content__top-song')
 const toggleMoreBtn = document.querySelector('.content__top-song-toggle')
@@ -6,6 +8,7 @@ const toggleMoreBtn = document.querySelector('.content__top-song-toggle')
 const COUNT_SONGS = 5
 
 const topSongs = {
+    currentUser: null,
     songs: [],
     count: COUNT_SONGS,
 
@@ -13,37 +16,14 @@ const topSongs = {
 
     async getSongs() {
         try {
-            let res = await fetch('https://api.zingmp3.local/api/music/top', {
-                headers: {
-                    Authorization: 'Bearer ' + localStorage.getItem('token'),
-                    'Content-Type': 'application/json',
-                },
-            })
-
-            if (!res.ok) {
-                localStorage.removeItem('token')
-
-                if (res.status === 401) {
-                    res = await fetch('https://api.zingmp3.local/api/music')
-
-                    if (!res.ok) {
-                        toast({
-                            title: 'Lỗi',
-                            message: 'Có lỗi xảy ra khi lấy danh sách bài hát',
-                            type: 'error',
-                        })
-                    }
-                }
-            }
-
-            const data = await res.json()
+            let res = await axiosClient.get('/music/top')
 
             sendEvent({
                 eventName: 'music:new-songs',
-                detail: data,
+                detail: res.data,
             })
 
-            this.songs = data.songs
+            this.songs = res.data.songs
         } catch (error) {}
     },
 
@@ -191,10 +171,7 @@ const topSongs = {
     async handleFavoriteSong(songIndex) {
         const isFavorite = this.songs[songIndex].is_favorite
 
-        // fetch api update favorite
-        const token = localStorage.getItem('token')
-
-        if (!token) {
+        if (!this.currentUser) {
             sendEvent({
                 eventName: 'modal:open-auth-modal',
             })
@@ -206,21 +183,9 @@ const topSongs = {
         // add favorite
         if (!isFavorite) {
             try {
-                const res = await fetch(`https://api.zingmp3.local/api/favorite`, {
-                    method: 'POST',
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        song_id: this.songs[songIndex].id,
-                    }),
+                await axiosClient.post('/favorite', {
+                    song_id: this.songs[songIndex].id,
                 })
-
-                if (!res.ok) {
-                    const errorData = await res.json()
-                    throw new Error(errorData.message || `HTTP error! Status: ${res.status}`)
-                }
 
                 sendEvent({
                     eventName: 'favorite:add',
@@ -235,18 +200,7 @@ const topSongs = {
             }
         } else {
             try {
-                // remove favorite
-                const res = await fetch(`https://api.zingmp3.local/api/favorite/${this.songs[songIndex].id}`, {
-                    method: 'DELETE',
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                })
-
-                if (!res.ok) {
-                    const errorData = await res.json()
-                    throw new Error(errorData.message || `HTTP error! Status: ${res.status}`)
-                }
+                await axiosClient.del(`/favorite/${this.songs[songIndex].id}`)
 
                 sendEvent({
                     eventName: 'favorite:remove',
@@ -263,6 +217,8 @@ const topSongs = {
     },
 
     async init() {
+        this.currentUser = await getCurrentUser()
+
         await this.getSongs()
         this.defineProperties()
         this.loadCurrentSong()

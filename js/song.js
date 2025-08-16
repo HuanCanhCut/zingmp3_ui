@@ -1,5 +1,7 @@
 import getParams from './helpers/getParams.js'
 import { listenEvent, sendEvent } from './helpers/event.js'
+import getCurrentUser from './getCurrentUser.js'
+import * as axiosClient from '../config/axiosClient.js'
 
 const playList = document.querySelector('.content__playlist-container')
 const togglePlayBtn = document.querySelector('.toggle-play-btn')
@@ -16,33 +18,11 @@ const SongApp = {
     songs: [],
     currentIndex: Number(getParams('id')),
     isPlaying: false,
+    currentUser: null,
     async getSongs() {
-        const token = localStorage.getItem('token')
-        let res = await fetch('https://api.zingmp3.local/api/music', {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        })
+        const res = await axiosClient.get('/music')
 
-        if (!res.ok) {
-            localStorage.removeItem('token')
-
-            if (res.status === 401) {
-                res = await fetch('https://api.zingmp3.local/api/music')
-
-                if (!res.ok) {
-                    toast({
-                        title: 'Lỗi',
-                        message: 'Có lỗi xảy ra khi lấy danh sách bài hát',
-                        type: 'error',
-                    })
-                }
-            }
-        }
-
-        const data = await res.json()
-
-        this.songs = data.musics
+        this.songs = res.data.musics
     },
 
     defineProperties() {
@@ -111,9 +91,7 @@ const SongApp = {
 
                 const isFavorite = this.songs[songIndex].is_favorite
 
-                const token = localStorage.getItem('token')
-
-                if (!token) {
+                if (!this.currentUser) {
                     sendEvent({
                         eventName: 'modal:open-auth-modal',
                     })
@@ -124,21 +102,9 @@ const SongApp = {
                 // add favorite
                 if (!isFavorite) {
                     try {
-                        const res = await fetch(`https://api.zingmp3.local/api/favorite`, {
-                            method: 'POST',
-                            headers: {
-                                Authorization: `Bearer ${token}`,
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                song_id: this.songs[songIndex].id,
-                            }),
+                        await axiosClient.post('/favorite', {
+                            song_id: this.songs[songIndex].id,
                         })
-
-                        if (!res.ok) {
-                            const errorData = await res.json()
-                            throw new Error(errorData.message || `HTTP error! Status: ${res.status}`)
-                        }
 
                         sendEvent({
                             eventName: 'favorite:add',
@@ -154,17 +120,7 @@ const SongApp = {
                 } else {
                     // remove favorite
                     try {
-                        const res = await fetch(`https://api.zingmp3.local/api/favorite/${this.songs[songIndex].id}`, {
-                            method: 'DELETE',
-                            headers: {
-                                Authorization: `Bearer ${token}`,
-                            },
-                        })
-
-                        if (!res.ok) {
-                            const errorData = await res.json()
-                            throw new Error(errorData.message || `HTTP error! Status: ${res.status}`)
-                        }
+                        await axiosClient.del(`/favorite/${this.songs[songIndex].id}`)
 
                         sendEvent({
                             eventName: 'favorite:remove',
@@ -269,6 +225,7 @@ const SongApp = {
     },
 
     async init() {
+        this.currentUser = await getCurrentUser()
         await this.getSongs()
         this.currentIndex = this.loadCurrentIndex()
         this.defineProperties()

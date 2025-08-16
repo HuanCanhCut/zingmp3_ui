@@ -1,3 +1,5 @@
+import * as axiosClient from '../config/axiosClient.js'
+
 const $ = document.querySelector.bind(document)
 const $$ = document.querySelectorAll.bind(document)
 
@@ -23,17 +25,7 @@ const app = {
                     throw new Error('Email is required')
                 }
 
-                const response = await fetch('https://api.zingmp3.local/api/auth/verify', {
-                    method: 'POST',
-                    body: JSON.stringify({ email: email.value }),
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                })
-
-                if (!response.ok) {
-                    throw new Error(response.status)
-                }
+                await axiosClient.post('/auth/verify', { email: email.value })
 
                 window.parent.postMessage(
                     {

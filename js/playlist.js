@@ -1,5 +1,7 @@
 import { listenEvent, sendEvent } from './helpers/event.js'
 import getParams from './helpers/getParams.js'
+import * as axiosClient from '../config/axiosClient.js'
+import getCurrentUser from './getCurrentUser.js'
 
 const playerCdThumb = document.querySelector('.music__player-info-thumb')
 const overlay = document.querySelector('#overlay')
@@ -24,6 +26,7 @@ cdThumbAnimate.pause()
 
 const playerController = {
     songs: [],
+    currentUser: null,
     currentIndex: 0, // index of the current song
     isPlaying: false,
     playerIndexes: [],
@@ -33,32 +36,17 @@ const playerController = {
     isMuted: localStorage.getItem('isMuted') === 'true' || false,
 
     async getSongs() {
-        const token = localStorage.getItem('token')
-        let res = await fetch('https://zing-api.huancanhcut.click/api/music', {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        })
+        let res = await axiosClient.get('/music')
 
-        if (!res.ok) {
-            localStorage.removeItem('token')
-
-            if (res.status === 401) {
-                res = await fetch('https://zing-api.huancanhcut.click/api/music')
-
-                if (!res.ok) {
-                    toast({
-                        title: 'Lỗi',
-                        message: 'Có lỗi xảy ra khi lấy danh sách bài hát',
-                        type: 'error',
-                    })
-                }
-            }
+        if (res.status !== 200) {
+            toast({
+                title: 'Lỗi',
+                message: 'Có lỗi xảy ra khi lấy danh sách bài hát',
+                type: 'error',
+            })
         }
 
-        const data = await res.json()
-
-        this.songs = data.musics
+        this.songs = res.data.musics
 
         const songId = getParams('id')
 
@@ -139,7 +127,7 @@ const playerController = {
             } catch (error) {}
         }
 
-        audio.onplay = () => {
+        audio.onplay = async () => {
             this.isPlaying = true
             togglePlayBtn.classList.add('playing')
             this.isPlaying = true
@@ -148,14 +136,8 @@ const playerController = {
             sendEvent({ eventName: 'song:is-playing', detail: true })
 
             // increase view count of current song
-            fetch(`https://zing-api.huancanhcut.click/api/music/${this.currentSong.id}/view`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    song_id: this.currentSong.id,
-                }),
+            await axiosClient.post(`music/${this.currentSong.id}/view`, {
+                song_id: this.currentSong.id,
             })
         }
 
@@ -458,6 +440,7 @@ const playerController = {
     },
 
     async init() {
+        this.currentUser = await getCurrentUser()
         await this.getSongs()
         this.currentIndex = this.setCurrentIndex()
         this.loadConfig()
