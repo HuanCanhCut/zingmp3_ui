@@ -1,10 +1,10 @@
 import axios from 'https://cdn.jsdelivr.net/npm/axios@1.7.7/+esm'
 
 // development
-// const baseURL = 'https://api.zingmp3.local/api'
+const baseURL = 'https://api.zingmp3.local/api'
 
 // production
-const baseURL = 'https://zing-api.huancanhcut.click/api'
+// const baseURL = 'https://zing-api.huancanhcut.click/api'
 
 const request = axios.create({
     baseURL,

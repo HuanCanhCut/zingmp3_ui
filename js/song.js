@@ -20,7 +20,7 @@ const SongApp = {
     isPlaying: false,
     currentUser: null,
     async getSongs() {
-        const res = await axiosClient.get('/music')
+        const res = await axiosClient.get('/musics')
 
         this.songs = res.data.musics
     },
@@ -102,7 +102,7 @@ const SongApp = {
                 // add favorite
                 if (!isFavorite) {
                     try {
-                        await axiosClient.post('/favorite', {
+                        await axiosClient.post('/favorites', {
                             song_id: this.songs[songIndex].id,
                         })
 
@@ -120,7 +120,7 @@ const SongApp = {
                 } else {
                     // remove favorite
                     try {
-                        await axiosClient.del(`/favorite/${this.songs[songIndex].id}`)
+                        await axiosClient.del(`/favorites/${this.songs[songIndex].id}`)
 
                         sendEvent({
                             eventName: 'favorite:remove',

@@ -110,7 +110,7 @@
                     )
                     window.parent.postMessage({ type: 'modal:close' }, '*')
 
-                    const response = await axiosClient.post('/music/upload', formData)
+                    const response = await axiosClient.post('/musics/upload', formData)
 
                     window.parent.postMessage({ type: 'music:add', detail: JSON.stringify(response.data) }, '*')
                 } catch (error) {

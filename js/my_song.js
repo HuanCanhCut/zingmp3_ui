@@ -16,7 +16,7 @@ const mySong = {
 
     async getMySongs() {
         try {
-            const res = await axiosClient.get('/music/my-songs')
+            const res = await axiosClient.get('/musics/my-songs')
 
             sendEvent({
                 eventName: 'music:new-songs',
@@ -225,7 +225,7 @@ const mySong = {
         try {
             const musicId = this.songs[songIndex].id
 
-            await axiosClient.del(`/music/${musicId}`)
+            await axiosClient.del(`/musics/${musicId}`)
 
             toast({
                 title: 'Thành công',

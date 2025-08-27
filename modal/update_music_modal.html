@@ -113,7 +113,7 @@
                 try {
                     window.parent.postMessage({ type: 'modal:close' }, '*')
 
-                    const response = await axiosClient.patch(`/music/${id}`, formData)
+                    const response = await axiosClient.patch(`/musics/${id}`, formData)
 
                     window.parent.postMessage({ type: 'music:update', detail: JSON.stringify(response.data) }, '*')
                 } catch (error) {

@@ -16,7 +16,7 @@ const topSongs = {
 
     async getSongs() {
         try {
-            let res = await axiosClient.get('/music/top')
+            let res = await axiosClient.get('/musics/top')
 
             sendEvent({
                 eventName: 'music:new-songs',
@@ -183,7 +183,7 @@ const topSongs = {
         // add favorite
         if (!isFavorite) {
             try {
-                await axiosClient.post('/favorite', {
+                await axiosClient.post('/favorites', {
                     song_id: this.songs[songIndex].id,
                 })
 
@@ -200,7 +200,7 @@ const topSongs = {
             }
         } else {
             try {
-                await axiosClient.del(`/favorite/${this.songs[songIndex].id}`)
+                await axiosClient.del(`/favorites/${this.songs[songIndex].id}`)
 
                 sendEvent({
                     eventName: 'favorite:remove',

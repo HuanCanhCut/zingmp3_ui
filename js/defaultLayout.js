@@ -236,7 +236,7 @@ const app = {
                 // add favorite
                 if (!isFavorite) {
                     try {
-                        const res = await axiosClient.post('/favorite', {
+                        const res = await axiosClient.post('/favorites', {
                             song_id: this.favoriteSongs[songIndex].song.id,
                         })
 
@@ -259,7 +259,7 @@ const app = {
                 } else {
                     // remove favorite
                     try {
-                        await axiosClient.del(`/favorite/${this.favoriteSongs[songIndex].song.id}`)
+                        await axiosClient.del(`/favorites/${this.favoriteSongs[songIndex].song.id}`)
 
                         sendEvent({
                             eventName: 'favorite:remove',
@@ -321,7 +321,7 @@ const app = {
                     return async (searchValue) => {
                         clearTimeout(timeoutId)
                         timeoutId = setTimeout(async () => {
-                            const res = await axiosClient.get(`/music/search?query=${searchValue}`)
+                            const res = await axiosClient.get(`/musics/search?query=${searchValue}`)
                             const data = res.data
 
                             if (Array.isArray(data.musics)) {
@@ -439,7 +439,7 @@ const app = {
             return
         }
 
-        const res = await axiosClient.get('/favorite')
+        const res = await axiosClient.get('/favorites')
 
         this.favoriteSongs = res.data.data.map((favorite) => {
             return {

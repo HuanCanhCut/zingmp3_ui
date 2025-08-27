@@ -36,7 +36,7 @@ const playerController = {
     isMuted: localStorage.getItem('isMuted') === 'true' || false,
 
     async getSongs() {
-        let res = await axiosClient.get('/music')
+        let res = await axiosClient.get('/musics')
 
         if (res.status !== 200) {
             toast({
