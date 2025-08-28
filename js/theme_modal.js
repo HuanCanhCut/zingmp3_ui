@@ -62,7 +62,7 @@ const app = {
 
         const themesGroupByCategoryHTML = Object.keys(themesGroupByCategory).map((category) => {
             return `
-                <div>
+                <div class="main__content-group">
                     <h3 class="main__content-title">${category}</h3>
                     <div class="theme__group">
                         ${themesGroupByCategory[category]
